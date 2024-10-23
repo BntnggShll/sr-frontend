@@ -1,31 +1,77 @@
-import React from "react";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 export const Services = (props) => {
+  const [services, setServices] = useState([]); 
+  const [currentPage, setCurrentPage] = useState(0); 
+  const servicesPerPage = 8; 
+
+  // Mengambil data dari API
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_API_URL}/service`)
+      .then(response => {
+        if (response.data.success) {
+          setServices(response.data.data);
+        } else {
+          console.error("Failed to fetch services");
+        }
+      })
+      .catch(error => {
+        console.error("Error fetching services", error);
+      });
+  }, []);
+
+  // Menghitung batas bawah dan atas untuk slice
+  const startIndex = currentPage * servicesPerPage;
+  const endIndex = startIndex + servicesPerPage;
+  const currentServices = services.slice(startIndex, endIndex);
+
+  // Fungsi untuk ke halaman berikutnya
+  const nextPage = () => {
+    if (endIndex < services.length) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  // Fungsi untuk ke halaman sebelumnya
+  const prevPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
   return (
-    <div id="services" className="text-center">
-      <div className="container">
-        <div className="section-title">
-          <h2>Services</h2>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit duis sed
-            dapibus leonec.
-          </p>
-        </div>
-        <div className="row">
-          {props.data
-            ? props.data.map((d, i) => (
-                <div key={`${d.name}-${i}`} className="col-md-4">
-                  {" "}
-                  <i className={d.icon}></i>
-                  <div className="service-desc">
-                    <h3>{d.name}</h3>
-                    <p>{d.text}</p>
-                  </div>
+    <section id='service' className='section active'>
+      <div id="services" className="text-center">
+        <div className="container">
+          <div className="section-title">
+            <h2><span>Services</span>
+              <span>Menu</span>
+            </h2>
+          </div>
+          <div className="row">
+            {currentServices.length > 0 ? (
+              currentServices.map((service) => (
+                <div key={service.service_id} className="col-md-3">
+                  <img src={service.image} alt="Service" className="img-fluid" />
+                  <p>{service.service_name}</p> 
                 </div>
               ))
-            : "loading"}
+            ) : (
+              <p>No services available</p>
+            )}
+          </div>
+          {/* Pagination Controls */}
+          <div className="pagination">
+            <button onClick={prevPage} disabled={currentPage === 0}>
+              Previous
+            </button>
+            <button onClick={nextPage} disabled={endIndex >= services.length}>
+              Next
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };

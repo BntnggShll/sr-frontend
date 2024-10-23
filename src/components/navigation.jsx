@@ -18,11 +18,7 @@ export const Navigation = (props) => {
             <span className="icon-bar"></span>{" "}
           </button>
           <a href="#page-top">
-            <img
-              src="../img/LogoSR.png"
-              alt="Logo"
-              style={{ height: "45px" }}
-            />
+            <img src="../img/LogoSR.png" alt="Logo" className="logo" />
           </a>
         </div>
 
@@ -33,12 +29,12 @@ export const Navigation = (props) => {
           <ul className="nav navbar-nav ms-autonavbar-nav me-auto mb-2 mb-lg-0">
             <li>
               <a href="#features" className="page-scroll">
-              Home
+                Home
               </a>
             </li>
             <li>
               <a href="#team" className="page-scroll">
-              Barberman
+                Barberman
               </a>
             </li>
             <li>
@@ -53,18 +49,35 @@ export const Navigation = (props) => {
             </li>
             <li>
               <a href="#testimonials" className="page-scroll">
-              Rating
+                Rating
+              </a>
+            </li>
+            <li>
+              <a href="#poin" className="page-scroll">
+                Poin
+              </a>
+            </li>
+            <li>
+              <a href="#product" className="page-scroll">
+                Product
               </a>
             </li>
             <li>
               <a href="#about" className="page-scroll">
-              Poin
+                About
               </a>
             </li>
-            <li>
-              <a href="#contact" className="page-scroll">
-              Product
+          </ul>
+          <ul className="nav navbar-nav ms-autonavbar-nav me-auto mb-2 mb-lg-0">
+            <li class="dropdown">
+              <a href="#profile" class="dropbtn">
+                Profile
               </a>
+              <div class="dropdown-content">
+                <a href="/login">login</a>
+                <a href="#">Link 2</a>
+                <a href="#">Link 3</a>
+              </div>
             </li>
           </ul>
         </div>

@@ -11,10 +11,9 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://localhost:8000/api/login', { email, password });
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/login`, { email, password });
       
-      
-      // Redirect to home page
+      localStorage.setItem('token', response.data.token);
       navigate('/');
     } catch (error) {
       // Menampilkan notifikasi jika login gagal
