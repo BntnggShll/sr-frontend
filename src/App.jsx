@@ -13,6 +13,7 @@ import Poin  from "./components/poin";
 import  Login from "./components/login";
 import Register from "./components/register";
 import Booking from "./components/booking";
+import DataUser from "./components/DataUser";
 import JsonData from "./data/data.json";
 import SmoothScroll from "smooth-scroll";
 import "./App.css";
@@ -31,6 +32,9 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register/>}/>
         <Route path="/booking" element={<Booking/>}/>
+        <Route path="/data" element={<DataUser/>}/>
+        
+        
 
         <Route
           path="/"

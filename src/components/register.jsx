@@ -21,7 +21,7 @@ const Register = () => {
       localStorage.setItem("user", response.data.user);
       navigate("/");
     } catch (error) {
-      toast.error("Register failed!!", {
+      toast.error("Register failed, The email has already been taken.", {
         position: "top-center",
         autoClose: 3000,
         hideProgressBar: false,
