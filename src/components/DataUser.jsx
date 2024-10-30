@@ -249,19 +249,19 @@ const DataUser = () => {
       <div>
         <a
           onClick={() => setView("pekerja")}
-          className={`btna ${view === "pekerja" ? "active" : ""}`}
+          className={`${view === "pekerja" ? "active" : ""}`}
         >
           <button className="tombol"> Pekerja</button>
         </a>
         <a
           onClick={() => setView("user")}
-          className={`btnb ${view === "user" ? "active" : ""}`}
+          className={`${view === "user" ? "active" : ""}`}
         >
           <button className="tombol">User</button>
         </a>
       </div>
 
-      <div id="user">
+      <div id="table">
         {view === "pekerja" ? (
           pekerja.length > 0 ? (
             <div>

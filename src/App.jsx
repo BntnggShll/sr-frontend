@@ -14,6 +14,8 @@ import  Login from "./components/login";
 import Register from "./components/register";
 import Booking from "./components/booking";
 import DataUser from "./components/DataUser";
+import DataProduct from "./components/DataProduct";
+import Profile from "./components/Profile"
 import JsonData from "./data/data.json";
 import SmoothScroll from "smooth-scroll";
 import "./App.css";
@@ -32,7 +34,11 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register/>}/>
         <Route path="/booking" element={<Booking/>}/>
-        <Route path="/data" element={<DataUser/>}/>
+        <Route path="/profile" element={<Profile/>}/>
+ 
+        {/* <Route path="/datauser" element={<DataUser/>}/>
+        <Route path="/dataproduct" element={<DataProduct/>}/>
+         */}
         
         
 
@@ -53,6 +59,17 @@ const App = () => {
             </div>
           }
         />
+        <Route
+          path="/admin"
+          element={
+            <div>
+              <DataUser/>
+              <DataProduct/>
+            </div>
+          }
+        />
+
+
       </Routes>
     </Router>
   );

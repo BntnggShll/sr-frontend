@@ -508,6 +508,11 @@ h2 span:last-child {
 #team .pagination {
   margin-top: 40px;
 }
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .pagination button {
   background-color: #d7843e;
   border: none;
@@ -586,7 +591,7 @@ h2 span:last-child {
 /* Footer Section*/
 #footer {
   background: #f6f6f6;
-  padding: 30px 0;
+  padding-top: 10px;
 }
 #footer p {
   color: #888;
@@ -788,21 +793,20 @@ h2 span:last-child {
   background-color: #f7f7f7;
   height: 100%;
 }
-#datauser h2{
-  color:#d7843e;
+#datauser h2 {
+  color: #d7843e;
   margin-right: 20px;
 }
-#datauser .form-control{
+#datauser .form-control {
   width: 400px;
   border-radius: 100px;
 }
 
-
 #datauser nav {
   display: flex;
   gap: 20px;
-  background-color: #0B161A;
-  padding: 20px 50px 0 ;
+  background-color: #0b161a;
+  padding: 20px 50px 0;
 }
 
 #datauser a {
@@ -813,84 +817,86 @@ h2 span:last-child {
   font-size: 18px;
   cursor: pointer;
   outline: none;
-  color: #D7843E;
-  margin: 20px -60px 20px 50px;
+  color: #d7843e;
+  margin: 20px -60px 0 50px;
 }
 
 #datauser a::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 50%;
   width: 0;
   height: 3px;
-  background-color: #0B161A; 
-  transition: all 0.3s ease; 
+  background-color: #0b161a;
+  transition: all 0.3s ease;
   transform: translateX(-50%);
 }
 
 #datauser a.active::after {
-  width: 100%; 
+  width: 100%;
 }
 
 #datauser a:hover {
-  color: #000;
+  color: #c20f0f;
 }
 
-#datauser .tombol{
+#datauser .tombol {
   border: none;
   background-color: transparent;
   margin: 30px 0 30px;
 }
-#datauser .tambah-pekerja{
+#datauser .tambah-pekerja {
   margin: 0 10px 0 550px;
 }
+/* dataproduct */
 
-/* pekerja */
-/* #pekerja {
-  background-color: #fff;
-  margin: 10px 50px;
-  filter: drop-shadow(0 4px 8px rgba(44, 43, 43, 0.5));
-  height: 90%;
+#dataproduct {
+  background-color: #f7f7f7;
+  height: 100%;
 }
-#pekerja th {
-  padding-top: 15px;
-  padding-left: 100px;
+#dataproduct h2 {
   color: #d7843e;
+  margin-right: 20px;
 }
-#pekerja td {
-  padding-left: 100px;
-  color: #000;
+#dataproduct .form-control {
+  width: 300px;
+  border-radius: 100px;
 }
-#pekerja .pagination {
+
+#dataproduct nav {
   display: flex;
-  justify-content: center; 
-  align-items: center; 
-  margin: 20px auto; 
-} */
-/* user */
-#user {
+  gap: 20px;
+  background-color: #0b161a;
+  padding: 20px 50px 0;
+}
+
+#dataproduct .tombol {
+  border: none;
+  background-color: transparent;
+  margin: 30px 0 30px;
+}
+#dataproduct .tambah-product {
+  margin-left: 500px;
+}
+
+/* tabel*/
+#table {
   background-color: #fff;
-  margin: 10px 50px;
+  margin: 30px 50px;
   filter: drop-shadow(0 4px 8px rgba(44, 43, 43, 0.5));
   height: 100%;
 }
-#user th {
+#table th {
   padding-top: 15px;
   padding-left: 100px;
   color: #d7843e;
 }
-#user td {
+#table td {
   padding-left: 100px;
   color: #000;
 }
-#user .pagination {
-  display: flex;
-  justify-content: center; 
-  align-items: center; 
-  margin: 20px auto; 
-}
-#user .aktif-class {
+#table .aktif-class {
   background-color: green;
   border-radius: 100px;
   color: white;
@@ -898,15 +904,13 @@ h2 span:last-child {
   text-align: center;
 }
 
-#user .non-aktif-class {
+#table .non-aktif-class {
   background-color: red;
   border-radius: 100px;
   color: white;
   text-align: center;
   width: 115px;
 }
-
-
 
 .modal {
   display: block; /* Jangan lupa memastikan display diatur */
@@ -915,18 +919,99 @@ h2 span:last-child {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); 
+  background-color: rgba(0, 0, 0, 0.5);
   z-index: 1;
 }
 .modal-content {
   background-color: white;
-  margin: 100px auto;
+  margin: 80px auto;
   padding: 20px;
   border: 1px solid #888;
   width: 33%;
 }
 
+/* profile */
 
+#profile {
+  background-color: #0b161a;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+#profile .image-container {
+  display: flex;
+  width: 93%;
+  height: 200px;
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #d7843e;
+  margin: 35px auto;
+}
+#profile .imgsampul {
+  width: 100%;
+}
+#profile .tes {
+  width: 230px;
+  height: 230px;
+  margin: -160px 0 0 100px;
+  border-radius: 50%;
+  border: 1px solid #d7843e;
+}
+#profile h2 {
+  margin: -90px 0 0 350px;
+  color: #d7843e;
+  font-family: "Jaini", sans-serif;
+  font-size: 50px;
+}
+#profile p.judul {
+  color: #d7843e;
+  font-family: "Jaini", sans-serif;
+  font-size: 30px;
+}
+#profile p.isi {
+  color: #fff;
+  font-size: 25px;
+}
+#profile .edit {
+  margin: -45px 0 0 1110px;
+}
+
+#profile button.a {
+  width: 100px;
+  padding: 10px;
+  color: #fff;
+  background-color: #d7843e;
+  border: none;
+  margin-right: 10px;
+  border-radius: 100px;
+}
+#profile button.b {
+  width: 100px;
+  padding: 10px;
+  color: #d7843e;
+  background-color: #fff;
+  border: none;
+  margin-right: 10px;
+  border-radius: 100px;
+}
+
+#profile button.a:hover {
+  background-color: #fff;
+  color: #d7843e;
+}
+#profile button.b:hover {
+  background-color: #d7843e;
+  color: #fff;
+}
+#profile .table {
+  margin: 60px 0 0 60px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 80%;
+}
 
 .image-register {
   position: absolute;

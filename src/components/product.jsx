@@ -9,10 +9,10 @@ export const Product = () => {
 
   // Mengambil data dari API
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/service`)
+    axios.get(`${process.env.REACT_APP_API_URL}/products`)
       .then(response => {
         if (response.data.success) {
-          setProducts(response.data.data);
+          setProducts(response.data.product);
         } else {
           console.error("Failed to fetch products");
         }
@@ -51,11 +51,11 @@ export const Product = () => {
           <div className="row">
             {currentProducts.map((product, index) => (
               <div 
-                key={product.id} 
+                key={product.product_id } 
                 className={`col-md-4  ${index % 2 === 0 ? 'even-class' : 'odd-class'}`}>
                 <div className="product-item">
                   <img src={product.image} alt={product.name} className="img-fluid" />
-                  <a href=""><button className="btn">{product.price}</button></a>
+                  <a href=""><button className="btn">Buy Now!</button></a>
                 </div>
               </div>
             ))}

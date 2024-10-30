@@ -70,7 +70,7 @@ export const Navigation = (props) => {
           </ul>
           <ul className="nav navbar-nav ms-autonavbar-nav me-auto mb-2 mb-lg-0">
             <li class="dropdown">
-              <a href="#profile" class="dropbtn">
+              <a href="/profile" class="dropbtn">
                 Profile
               </a>
               <div class="dropdown-content">
