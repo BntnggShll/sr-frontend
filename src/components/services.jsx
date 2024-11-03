@@ -8,7 +8,7 @@ export const Services = (props) => {
 
   // Mengambil data dari API
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/service`)
+    axios.get(`${process.env.REACT_APP_API_URL}/services`)
       .then(response => {
         if (response.data.success) {
           setServices(response.data.data);

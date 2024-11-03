@@ -119,14 +119,16 @@ const DataUser = () => {
       .post(`${process.env.REACT_APP_API_URL}/registerpekerja`, newPekerja)
       .then((response) => {
             
-        setShowModal(false); // Tutup modal setelah berhasil menambahkan pekerja
+        setShowModal(false);
         setNewPekerja({
           name: "",
           email: "",
           phone_number: "",
           password:"",
         });
+        window.location.reload();
       })
+      
       .catch((error) => {
         console.error("Error adding pekerja", error);
       });

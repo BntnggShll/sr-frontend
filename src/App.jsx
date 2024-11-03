@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Navigation } from "./components/navigation";
 import { Header } from "./components/header";
@@ -16,7 +15,7 @@ import Booking from "./components/booking";
 import DataUser from "./components/DataUser";
 import DataProduct from "./components/DataProduct";
 import Profile from "./components/Profile"
-import JsonData from "./data/data.json";
+import DataService from "./components/DataService";
 import SmoothScroll from "smooth-scroll";
 import "./App.css";
 
@@ -35,10 +34,10 @@ const App = () => {
         <Route path="/register" element={<Register/>}/>
         <Route path="/booking" element={<Booking/>}/>
         <Route path="/profile" element={<Profile/>}/>
- 
-        {/* <Route path="/datauser" element={<DataUser/>}/>
-        <Route path="/dataproduct" element={<DataProduct/>}/>
-         */}
+        {/* <Route path="/dataservice" element={<DataService/>}/>
+        <Route path="/datauser" element={<DataUser/>}/>
+        <Route path="/dataproduct" element={<DataProduct/>}/> */}
+        
         
         
 
@@ -65,6 +64,7 @@ const App = () => {
             <div>
               <DataUser/>
               <DataProduct/>
+              <DataService/>
             </div>
           }
         />

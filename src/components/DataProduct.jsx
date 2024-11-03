@@ -56,6 +56,7 @@ const ProductTable = () => {
           stock: "",
           image: null,
         });
+        window.location.reload();
       })
       .catch((error) => {
         console.error("Error adding product", error);
@@ -69,15 +70,14 @@ const ProductTable = () => {
     setShowModal(true);
   };
 
-  // Fungsi untuk menyimpan perubahan edit produk
+  // Mengedit fungsi handleSaveEdit untuk memastikan gambar diproses dengan benar
   const handleSaveEdit = (e) => {
     e.preventDefault();
-
     const formData = new FormData();
     formData.append("name", newProduct.name);
     formData.append("description", newProduct.description);
-    formData.append("price", newProduct.price);
-    formData.append("stock", newProduct.stock);
+    formData.append("price", Number(newProduct.price));
+    formData.append("stock", Number(newProduct.stock));
     if (newProduct.image) {
       formData.append("image", newProduct.image); // Append gambar ke FormData
     }
@@ -110,26 +110,31 @@ const ProductTable = () => {
         setEditingProduct(null);
       })
       .catch((error) => {
-        console.error("Error updating product", error);
+        if (error.response) {
+          console.error("Error response data:", error.response.data);
+          console.error("Error status:", error.response.status);
+        } else {
+          console.error("Error", error.message);
+        }
       });
   };
 
-   // Pagination untuk user
-   const startIndexProduct = currentPageProduct * itemsPerPage;
-   const endIndexProduct = startIndexProduct + itemsPerPage;
-   const currentProduct = products.slice(startIndexProduct, endIndexProduct);
- 
-   const nextPageproducts = () => {
-     if (endIndexProduct < products.length) {
+  // Pagination untuk user
+  const startIndexProduct = currentPageProduct * itemsPerPage;
+  const endIndexProduct = startIndexProduct + itemsPerPage;
+  const currentProduct = products.slice(startIndexProduct, endIndexProduct);
+
+  const nextPageproducts = () => {
+    if (endIndexProduct < products.length) {
       currentPageProduct((prevPage) => prevPage + 1);
-     }
-   };
- 
-   const prevPageproducts = () => {
-     if (currentPageProduct > 0) {
+    }
+  };
+
+  const prevPageproducts = () => {
+    if (currentPageProduct > 0) {
       setCurrentPageProduct((prevPage) => prevPage - 1);
-     }
-   };
+    }
+  };
 
   // Fungsi untuk menghapus produk
   const handleDeleteProduct = (product_id) => {
@@ -137,6 +142,7 @@ const ProductTable = () => {
       .delete(`${process.env.REACT_APP_API_URL}/products/${product_id}`)
       .then(() => {
         setProducts(products.filter((product) => product.id !== product_id));
+        window.location.reload();
       })
       .catch((error) => {
         console.error("Error deleting product", error);
@@ -189,7 +195,7 @@ const ProductTable = () => {
             </tr>
           </thead>
           <tbody>
-            {products.map((product) => (
+            {currentProduct.map((product) => (
               <tr key={product.product_id}>
                 <td>{product.name}</td>
                 <td>{product.description}</td>
@@ -284,9 +290,8 @@ const ProductTable = () => {
                 <input
                   type="file"
                   className="form-control"
-                  value={newProduct.image}
                   onChange={(e) =>
-                    setNewProduct({ ...newProduct, image: e.target.value })
+                    setNewProduct({ ...newProduct, image: e.target.files[0] })
                   }
                 />
               </div>
@@ -310,16 +315,16 @@ const ProductTable = () => {
         </div>
       )}
       <div className="pagination">
-              <button onClick={prevPageproducts} disabled={currentPageProduct === 0}>
-                Previous
-              </button>
-              <button
-                onClick={nextPageproducts}
-                disabled={endIndexProduct >= products.length}
-              >
-                Next
-              </button>
-            </div>
+        <button onClick={prevPageproducts} disabled={currentPageProduct === 0}>
+          Previous
+        </button>
+        <button
+          onClick={nextPageproducts}
+          disabled={endIndexProduct >= products.length}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };

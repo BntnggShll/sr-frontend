@@ -879,13 +879,42 @@ h2 span:last-child {
 #dataproduct .tambah-product {
   margin-left: 500px;
 }
+/* dataservice */
+
+#dataservice {
+  background-color: #f7f7f7;
+  height: 100%;
+}
+#dataservice h2 {
+  color: #d7843e;
+  margin-right: 20px;
+}
+#dataservice .form-control {
+  width: 300px;
+  border-radius: 100px;
+}
+
+#dataservice nav {
+  display: flex;
+  gap: 20px;
+  background-color: #0b161a;
+  padding: 20px 50px 0;
+}
+
+#dataservice .tombol {
+  border: none;
+  background-color: transparent;
+  margin: 30px 0 30px;
+}
+#dataservice .tambahservice {
+  margin-left: 500px;
+}
 
 /* tabel*/
 #table {
   background-color: #fff;
   margin: 30px 50px;
   filter: drop-shadow(0 4px 8px rgba(44, 43, 43, 0.5));
-  height: 100%;
 }
 #table th {
   padding-top: 15px;

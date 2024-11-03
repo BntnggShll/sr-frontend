@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
   const [user, setUser] = useState(null); // Menggunakan null sebagai nilai awal
   const [error, setError] = useState(null); // State untuk menangani error
+  const navigate = useNavigate(); // Inisialisasi navigate
 
   useEffect(() => {
     const token = localStorage.getItem('token'); // Mengambil token dari localStorage
@@ -16,11 +17,13 @@ const Profile = () => {
       } catch (error) {
         console.error("Error decoding token", error);
         setError("Invalid token format or missing parts."); // Menangani error
+        navigate('/login'); // Navigasi ke login jika token tidak valid
       }
     } else {
       console.log("No token found");
+      navigate('/login'); // Navigasi ke login jika tidak ada token
     }
-  }, []);
+  }, [navigate]); // Tambahkan navigate ke dependency array
 
   if (error) {
     return <div>{error}</div>; // Menampilkan pesan error jika ada
