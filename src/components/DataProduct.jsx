@@ -63,14 +63,12 @@ const ProductTable = () => {
       });
   };
 
-  // Fungsi untuk mengedit produk
   const handleEditProduct = (product) => {
     setEditingProduct(product);
-    setNewProduct(product); // Set produk yang ingin diedit ke dalam form
+    setNewProduct(product);
     setShowModal(true);
   };
 
-  // Mengedit fungsi handleSaveEdit untuk memastikan gambar diproses dengan benar
   const handleSaveEdit = (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -80,6 +78,11 @@ const ProductTable = () => {
     formData.append("stock", Number(newProduct.stock));
     if (newProduct.image) {
       formData.append("image", newProduct.image); // Append gambar ke FormData
+    }
+
+    // Log semua nilai dalam formData ke konsol
+    for (let [key, value] of formData.entries()) {
+        console.log(`${key}:`, value);
     }
 
     axios
@@ -118,6 +121,7 @@ const ProductTable = () => {
         }
       });
   };
+
 
   // Pagination untuk user
   const startIndexProduct = currentPageProduct * itemsPerPage;

@@ -883,7 +883,6 @@ h2 span:last-child {
 
 #dataservice {
   background-color: #f7f7f7;
-  height: 100%;
 }
 #dataservice h2 {
   color: #d7843e;
@@ -908,6 +907,35 @@ h2 span:last-child {
 }
 #dataservice .tambahservice {
   margin-left: 500px;
+}
+/* dataschedule */
+
+#dataschedule {
+  background-color: #f7f7f7;
+}
+#dataschedule h2 {
+  color: #d7843e;
+  margin-right: 20px;
+}
+#dataschedule .form-control {
+  width: 300px;
+  border-radius: 100px;
+}
+
+#dataschedule nav {
+  display: flex;
+  gap: 20px;
+  background-color: #0b161a;
+  padding: 20px 50px 0;
+}
+
+#dataschedule .tombol {
+  border: none;
+  background-color: transparent;
+  margin: 30px 0 30px;
+}
+#dataschedule .tambahjadwal {
+  margin-left: 300px;
 }
 
 /* tabel*/
