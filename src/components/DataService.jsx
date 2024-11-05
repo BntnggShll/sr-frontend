@@ -76,7 +76,7 @@ const ServiceTable = () => {
       formData.append("image", newService.image);
     }
     axios
-      .put(
+      .post(
         `${process.env.REACT_APP_API_URL}/services/${editingService.service_id}`,
         formData,
         {
@@ -214,7 +214,7 @@ const ServiceTable = () => {
       {showModal && (
         <div className="modal">
           <div className="modal-content">
-            <h2>{editingService ? "Edit Service" : "Add Service"}</h2>
+            <h2>{editingService ? "Edit Service" : "Tambah Service"}</h2>
             <form onSubmit={editingService ? handleSaveEdit : handleAddService}>
               <div className="form-group">
                 <label>Service Name:</label>

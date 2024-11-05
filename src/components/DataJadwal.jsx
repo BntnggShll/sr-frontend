@@ -3,7 +3,6 @@ import axios from "axios";
 
 const ScheduleTable = () => {
   const [schedules, setSchedules] = useState([]);
-  const [workers, setWorkers] = useState([]); // State untuk menyimpan pekerja
   const [showModal, setShowModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPageSchedule, setCurrentPageSchedule] = useState(0);
@@ -26,19 +25,7 @@ const ScheduleTable = () => {
       .catch((error) => {
         console.error("Error fetching schedules", error);
       });
-
-    // Fetch workers with role pekerja
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/workers`)
-      .then((response) => {
-        const filteredWorkers = response.data.users.filter(
-          (user) => user.role === "pekerja"
-        );
-        setWorkers(filteredWorkers);
-      })
-      .catch((error) => {
-        console.error("Error fetching workers", error);
-      });
+      
   }, []);
 
   const handleAddSchedule = (e) => {
@@ -199,7 +186,7 @@ const ScheduleTable = () => {
       {showModal && (
         <div className="modal">
           <div className="modal-content">
-            <h2>{editingSchedule ? "Edit Schedule" : "Add Schedule"}</h2>
+            <h2>{editingSchedule ? "Edit Schedule" : "Tambah Schedule"}</h2>
             <form onSubmit={editingSchedule ? handleSaveEdit : handleAddSchedule}>
               <div className="form-group">
                 <label>Available Time Start:</label>

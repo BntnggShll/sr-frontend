@@ -71,22 +71,20 @@ const ProductTable = () => {
 
   const handleSaveEdit = (e) => {
     e.preventDefault();
+
+    // Buat form data
     const formData = new FormData();
     formData.append("name", newProduct.name);
     formData.append("description", newProduct.description);
     formData.append("price", Number(newProduct.price));
     formData.append("stock", Number(newProduct.stock));
     if (newProduct.image) {
-      formData.append("image", newProduct.image); // Append gambar ke FormData
+      formData.append("image", newProduct.image);
     }
 
-    // Log semua nilai dalam formData ke konsol
-    for (let [key, value] of formData.entries()) {
-        console.log(`${key}:`, value);
-    }
-
+    // Kirim permintaan ke API
     axios
-      .put(
+      .post(
         `${process.env.REACT_APP_API_URL}/products/${editingProduct.product_id}`,
         formData,
         {
@@ -96,6 +94,7 @@ const ProductTable = () => {
         }
       )
       .then((response) => {
+        // Update produk di daftar produk
         const updatedProducts = products.map((product) =>
           product.product_id === editingProduct.product_id
             ? response.data.product
@@ -122,7 +121,6 @@ const ProductTable = () => {
       });
   };
 
-
   // Pagination untuk user
   const startIndexProduct = currentPageProduct * itemsPerPage;
   const endIndexProduct = startIndexProduct + itemsPerPage;
@@ -146,7 +144,7 @@ const ProductTable = () => {
       .delete(`${process.env.REACT_APP_API_URL}/products/${product_id}`)
       .then(() => {
         setProducts(products.filter((product) => product.id !== product_id));
-        window.location.reload();
+        // window.location.reload();
       })
       .catch((error) => {
         console.error("Error deleting product", error);
