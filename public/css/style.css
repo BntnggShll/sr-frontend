@@ -966,7 +966,26 @@ h2 span:last-child {
 #dataschedule .tambahjadwal {
   margin-left: 300px;
 }
+/* datareting */
 
+#datareting {
+  background-color: #f7f7f7;
+}
+#datareting h2 {
+  color: #d7843e;
+  margin-right: 20px;
+}
+#datareting .form-control {
+  width: 300px;
+  border-radius: 100px;
+}
+
+#datareting nav {
+  display: flex;
+  gap: 20px;
+  background-color: #0b161a;
+  padding: 20px 50px 0;
+}
 /* tabel*/
 #table {
   background-color: #fff;

@@ -43,7 +43,6 @@ const DataDocumentation = () => {
   const handleAddDocumentation = (e) => {
     e.preventDefault();
     const formData = new FormData();
-    console.log(newDocumentation)
     formData.append("worker_id", newDocumentation.worker_id);
     formData.append("reservation_id", newDocumentation.reservation_id);
     formData.append("description", newDocumentation.description);
@@ -166,7 +165,7 @@ const DataDocumentation = () => {
         <table className="table">
           <thead>
             <tr>
-              <th>Worker ID</th>
+              <th>Worker</th>
               <th>Reservation ID</th>
               <th>Description</th>
               <th>Photo</th>
@@ -176,7 +175,7 @@ const DataDocumentation = () => {
           <tbody>
             {currentDocumentations.map((documentation) => (
               <tr key={documentation.documentation_id}>
-                <td>{documentation.worker_id}</td>
+                <td>{documentation.worker.name}</td>
                 <td>{documentation.reservation_id}</td>
                 <td>{documentation.description}</td>
                 <td>

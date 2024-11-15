@@ -18,6 +18,7 @@ import Profile from "./components/Profile"
 import DataService from "./components/DataService";
 import DataDocumentation from "./components/DataDokumentasi";
 import DataJadwal from "./components/DataJadwal";
+import DataReting from './components/DataReting';
 import SmoothScroll from "smooth-scroll";
 import "./App.css";
 
@@ -76,6 +77,7 @@ const App = () => {
           element={
             <div>
               <DataDocumentation/>
+              <DataReting/>
             </div>
           }
         />
