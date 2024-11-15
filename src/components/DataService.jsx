@@ -160,7 +160,7 @@ const ServiceTable = () => {
               className="btn btn-success"
               onClick={() => setShowModal(true)}
             >
-              Add Service
+              Tambah Service
             </button>
           </div>
         </div>

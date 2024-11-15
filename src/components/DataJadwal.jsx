@@ -132,7 +132,7 @@ const ScheduleTable = () => {
           />
           <div className="tambahjadwal">
           <button className="btn btn-success" onClick={() => setShowModal(true)}>
-            Add Schedule
+            Tambah Schedule
           </button>
           </div>
         </div>

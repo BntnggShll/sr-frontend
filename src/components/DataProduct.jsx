@@ -142,9 +142,8 @@ const ProductTable = () => {
   const handleDeleteProduct = (product_id) => {
     axios
       .delete(`${process.env.REACT_APP_API_URL}/products/${product_id}`)
-      .then(() => {
+      .then((response) => {
         setProducts(products.filter((product) => product.id !== product_id));
-        // window.location.reload();
       })
       .catch((error) => {
         console.error("Error deleting product", error);

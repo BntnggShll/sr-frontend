@@ -16,6 +16,7 @@ import DataUser from "./components/DataUser";
 import DataProduct from "./components/DataProduct";
 import Profile from "./components/Profile"
 import DataService from "./components/DataService";
+import DataDocumentation from "./components/DataDokumentasi";
 import DataJadwal from "./components/DataJadwal";
 import SmoothScroll from "smooth-scroll";
 import "./App.css";
@@ -67,6 +68,14 @@ const App = () => {
               <DataProduct/>
               <DataService/>
               <DataJadwal/>
+            </div>
+          }
+        />
+        <Route
+          path="/pekerja"
+          element={
+            <div>
+              <DataDocumentation/>
             </div>
           }
         />
