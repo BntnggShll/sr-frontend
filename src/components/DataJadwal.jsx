@@ -3,11 +3,13 @@ import axios from "axios";
 
 const ScheduleTable = () => {
   const [schedules, setSchedules] = useState([]);
+  const [pekerja, setpekerja] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPageSchedule, setCurrentPageSchedule] = useState(0);
   const itemsPerPage = 10;
   const [newSchedule, setNewSchedule] = useState({
+    worker_id:"",
     available_time_start: "",
     available_time_end: "",
     available_date: "",
@@ -25,17 +27,28 @@ const ScheduleTable = () => {
       .catch((error) => {
         console.error("Error fetching schedules", error);
       });
-      
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/pekerja`)
+      .then((response) => {
+        setpekerja(response.data.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching schedules", error);
+      });
   }, []);
+  
+    
 
   const handleAddSchedule = (e) => {
     e.preventDefault();
+    
     axios
       .post(`${process.env.REACT_APP_API_URL}/schedules`, newSchedule)
       .then((response) => {
         setSchedules([...schedules, response.data.schedule]);
         setShowModal(false);
         setNewSchedule({
+          worker_id:"",
           available_time_start: "",
           available_time_end: "",
           available_date: "",
@@ -55,10 +68,17 @@ const ScheduleTable = () => {
 
   const handleSaveEdit = (e) => {
     e.preventDefault();
+    
+    const formData = new FormData();
+    formData.append("worker_id", newSchedule.worker_id);
+    formData.append("available_time_start", newSchedule.available_time_start);
+    formData.append("available_time_end", newSchedule.available_time_end);
+    formData.append("available_date", newSchedule.available_date);
+    formData.append("status", newSchedule.status);
     axios
-      .put(
+      .post(
         `${process.env.REACT_APP_API_URL}/schedules/${editingSchedule.schedule_id}`,
-        newSchedule
+        formData
       )
       .then((response) => {
         const updatedSchedules = schedules.map((schedule) =>
@@ -69,6 +89,7 @@ const ScheduleTable = () => {
         setSchedules(updatedSchedules);
         setShowModal(false);
         setNewSchedule({
+          worker_id:"",
           available_time_start: "",
           available_time_end: "",
           available_date: "",
@@ -95,7 +116,9 @@ const ScheduleTable = () => {
   };
 
   const filteredSchedules = schedules.filter((schedule) =>
-    String(schedule.available_date).toLowerCase().includes(searchQuery.toLowerCase())
+    String(schedule.available_date)
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase())
   );
 
   const startIndex = currentPageSchedule * itemsPerPage;
@@ -131,54 +154,62 @@ const ScheduleTable = () => {
             className="form-control"
           />
           <div className="tambahjadwal">
-          <button className="btn btn-success" onClick={() => setShowModal(true)}>
-            Tambah Schedule
-          </button>
+            <button
+              className="btn btn-success"
+              onClick={() => setShowModal(true)}
+            >
+              Tambah Schedule
+            </button>
           </div>
         </div>
       </nav>
       <div id="table">
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Available Time Start</th>
-            <th>Available Time End</th>
-            <th>Available Date</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentSchedules.map((schedule) => (
-            <tr key={schedule.schedule_id}>
-              <td>{schedule.available_time_start}</td>
-              <td>{schedule.available_time_end}</td>
-              <td>{schedule.available_date}</td>
-              <td>{schedule.status}</td>
-              <td>
-                <button
-                  className="btn btn-warning"
-                  onClick={() => handleEditSchedule(schedule)}
-                >
-                  Edit
-                </button>
-                <button
-                  className="btn btn-danger"
-                  onClick={() => handleDeleteSchedule(schedule.schedule_id)}
-                >
-                  Delete
-                </button>
-              </td>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Worker</th>
+              <th>Available Time Start</th>
+              <th>Available Time End</th>
+              <th>Available Date</th>
+              <th>Status</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {currentSchedules.map((schedule) => (
+              <tr key={schedule.schedule_id}>
+                <td>{schedule.worker.name}</td>
+                <td>{schedule.available_time_start}</td>
+                <td>{schedule.available_time_end}</td>
+                <td>{schedule.available_date}</td>
+                <td>{schedule.status}</td>
+                <td>
+                  <button
+                    className="btn btn-warning"
+                    onClick={() => handleEditSchedule(schedule)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => handleDeleteSchedule(schedule.schedule_id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
       <div className="pagination">
         <button onClick={prevPage} disabled={currentPageSchedule === 0}>
           Previous
         </button>
-        <button onClick={nextPage} disabled={endIndex >= filteredSchedules.length}>
+        <button
+          onClick={nextPage}
+          disabled={endIndex >= filteredSchedules.length}
+        >
           Next
         </button>
       </div>
@@ -187,7 +218,33 @@ const ScheduleTable = () => {
         <div className="modal">
           <div className="modal-content">
             <h2>{editingSchedule ? "Edit Schedule" : "Tambah Schedule"}</h2>
-            <form onSubmit={editingSchedule ? handleSaveEdit : handleAddSchedule}>
+            <form
+              onSubmit={editingSchedule ? handleSaveEdit : handleAddSchedule}
+            >
+              <div className="form-group">
+                <label>Worker:</label>
+                <select
+                  className="form-control"
+                  value={newSchedule.worker_id}
+                  onChange={(e) =>
+                    setNewSchedule({
+                      ...newSchedule,
+                      worker_id: e.target.value,
+                    })
+                  }
+                  required
+                >
+                  <option value="">Select Worker</option>
+                  {pekerja.map((pekerja) => (
+                    <option
+                      key={pekerja.user_id}
+                      value={pekerja.user_id}
+                    >
+                      {pekerja.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
               <div className="form-group">
                 <label>Available Time Start:</label>
                 <input

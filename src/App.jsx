@@ -5,7 +5,7 @@ import { Features } from "./components/features";
 import { About } from "./components/about";
 import { Services } from "./components/services";
 import { Gallery } from "./components/gallery";
-import { Testimonials } from "./components/testimonials";
+import { Rating } from "./components/rating";
 import { Team } from "./components/Team";
 import  {Product } from "./components/product";
 import Poin  from "./components/poin";
@@ -18,7 +18,8 @@ import Profile from "./components/Profile"
 import DataService from "./components/DataService";
 import DataDocumentation from "./components/DataDokumentasi";
 import DataJadwal from "./components/DataJadwal";
-import DataReting from './components/DataReting';
+import DataReting from "./components/DataReting";
+import DataJadwalPekerja from "./components/DataJadwalPekerja";
 import SmoothScroll from "smooth-scroll";
 import "./App.css";
 
@@ -54,7 +55,7 @@ const App = () => {
               <Team />
               <Services  />
               <Gallery />
-              <Testimonials />
+              <Rating />
               <Poin/>
               <Product/>
               <About />
@@ -78,6 +79,7 @@ const App = () => {
             <div>
               <DataDocumentation/>
               <DataReting/>
+              <DataJadwalPekerja/>
             </div>
           }
         />

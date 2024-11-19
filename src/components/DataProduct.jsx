@@ -56,7 +56,6 @@ const ProductTable = () => {
           stock: "",
           image: null,
         });
-        window.location.reload();
       })
       .catch((error) => {
         console.error("Error adding product", error);
