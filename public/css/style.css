@@ -473,11 +473,26 @@ h2 span:last-child {
   background-color: #0b161a;
   width: 250px;
   height: 90px;
-  padding-top: 5px;
-  padding-left: 15px;
-  text-align: left;
+  text-align: center;
   bottom: 50px;
   left: 55px;
+}
+#team .border {
+  position: relative;
+  font-family: "Jaini", sans-serif;
+  color: #d7843e;
+  font-size: 25px;
+  border: inset #d7843e;
+  background-color: #0b161a;
+  width: 250px;
+  height: 90px;
+  text-align: center;
+  bottom: 50px;
+  left: 0px;
+}
+#team .tombol{
+  background: transparent;
+  border: none;
 }
 #team .col-md-4 {
   position: relative;
@@ -1096,7 +1111,14 @@ h2 span:last-child {
   gap: 10px;
   width: 80%;
 }
-
+#jadwal {
+  background-color: #0b161a;
+  height: 100%;
+}
+#konfirmasi {
+  background-color: #0b161a;
+  height: 100%;
+}
 .image-register {
   position: absolute;
   height: auto;

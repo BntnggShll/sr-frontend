@@ -9,11 +9,10 @@ const ScheduleTable = () => {
   const [currentPageSchedule, setCurrentPageSchedule] = useState(0);
   const itemsPerPage = 10;
   const [newSchedule, setNewSchedule] = useState({
-    worker_id:"",
+    worker_id: "",
     available_time_start: "",
     available_time_end: "",
     available_date: "",
-    status: "Available",
   });
   const [editingSchedule, setEditingSchedule] = useState(null);
 
@@ -36,19 +35,18 @@ const ScheduleTable = () => {
         console.error("Error fetching schedules", error);
       });
   }, []);
-  
-    
 
   const handleAddSchedule = (e) => {
     e.preventDefault();
-    
+    console.log(newSchedule);
+
     axios
       .post(`${process.env.REACT_APP_API_URL}/schedules`, newSchedule)
       .then((response) => {
-        setSchedules([...schedules, response.data.schedule]);
+        setSchedules(response.data.schedule);
         setShowModal(false);
         setNewSchedule({
-          worker_id:"",
+          worker_id: "",
           available_time_start: "",
           available_time_end: "",
           available_date: "",
@@ -68,9 +66,8 @@ const ScheduleTable = () => {
 
   const handleSaveEdit = (e) => {
     e.preventDefault();
-    
+
     const formData = new FormData();
-    formData.append("worker_id", newSchedule.worker_id);
     formData.append("available_time_start", newSchedule.available_time_start);
     formData.append("available_time_end", newSchedule.available_time_end);
     formData.append("available_date", newSchedule.available_date);
@@ -89,7 +86,7 @@ const ScheduleTable = () => {
         setSchedules(updatedSchedules);
         setShowModal(false);
         setNewSchedule({
-          worker_id:"",
+          worker_id: "",
           available_time_start: "",
           available_time_end: "",
           available_date: "",
@@ -214,13 +211,11 @@ const ScheduleTable = () => {
         </button>
       </div>
 
-      {showModal && (
+      {showModal && editingSchedule === null && (
         <div className="modal">
           <div className="modal-content">
-            <h2>{editingSchedule ? "Edit Schedule" : "Tambah Schedule"}</h2>
-            <form
-              onSubmit={editingSchedule ? handleSaveEdit : handleAddSchedule}
-            >
+            <h2>Tambah Schedule</h2>
+            <form onSubmit={handleAddSchedule}>
               <div className="form-group">
                 <label>Worker:</label>
                 <select
@@ -236,15 +231,83 @@ const ScheduleTable = () => {
                 >
                   <option value="">Select Worker</option>
                   {pekerja.map((pekerja) => (
-                    <option
-                      key={pekerja.user_id}
-                      value={pekerja.user_id}
-                    >
+                    <option key={pekerja.user_id} value={pekerja.user_id}>
                       {pekerja.name}
                     </option>
                   ))}
                 </select>
               </div>
+              <div className="form-group">
+                <label>Available Time Start:</label>
+                <input
+                  type="time"
+                  className="form-control"
+                  value={newSchedule.available_time_start}
+                  onChange={(e) =>
+                    setNewSchedule({
+                      ...newSchedule,
+                      available_time_start: e.target.value,
+                    })
+                  }
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Available Time End:</label>
+                <input
+                  type="time"
+                  className="form-control"
+                  value={newSchedule.available_time_end}
+                  onChange={(e) =>
+                    setNewSchedule({
+                      ...newSchedule,
+                      available_time_end: e.target.value,
+                    })
+                  }
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Available Date:</label>
+                <select
+                  className="form-control"
+                  value={newSchedule.available_date}
+                  onChange={(e) =>
+                    setNewSchedule({
+                      ...newSchedule,
+                      available_date: e.target.value,
+                    })
+                  }
+                  required
+                  >
+                    <option value="">Select Days</option>
+                    <option value="10">10 Hari</option>
+                    <option value="20">20 Hari</option>
+                    <option value="30">30 Hari</option>
+                  </select>
+              </div>
+              <div className="modal-buttons">
+                <button type="submit" className="btn btn-primary">
+                  Tambah
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => setShowModal(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {showModal && editingSchedule !== null && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>Edit Schedule</h2>
+            <form onSubmit={handleSaveEdit}>
               <div className="form-group">
                 <label>Available Time Start:</label>
                 <input
@@ -296,7 +359,10 @@ const ScheduleTable = () => {
                   className="form-control"
                   value={newSchedule.status}
                   onChange={(e) =>
-                    setNewSchedule({ ...newSchedule, status: e.target.value })
+                    setNewSchedule({
+                      ...newSchedule,
+                      status: e.target.value,
+                    })
                   }
                 >
                   <option value="Available">Available</option>
@@ -306,7 +372,7 @@ const ScheduleTable = () => {
               </div>
               <div className="modal-buttons">
                 <button type="submit" className="btn btn-primary">
-                  {editingSchedule ? "Save Changes" : "Add"}
+                  Save Changes
                 </button>
                 <button
                   type="button"
