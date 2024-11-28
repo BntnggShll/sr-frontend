@@ -28,7 +28,7 @@ export const Navigation = (props) => {
         >
           <ul className="nav navbar-nav ms-autonavbar-nav me-auto mb-2 mb-lg-0">
             <li>
-              <a href="#features" className="page-scroll">
+              <a href="#reservation" className="page-scroll">
                 Home
               </a>
             </li>

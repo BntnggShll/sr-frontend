@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Calendar from "react-calendar";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 const BookingList = () => {
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null); // Menggunakan null sebagai nilai awal
+  const [error, setError] = useState(null);
   const [services, setServices] = useState([]);
   const [workers, setWorkers] = useState([]);
   const [schedules, setSchedules] = useState([]);
@@ -14,46 +19,66 @@ const BookingList = () => {
   const [selectedSchedule, setSelectedSchedule] = useState(null); // Menyimpan jadwal yang dipilih
   const workersPerPage = 3;
   const itemsPerPage = 8;
-  const itemjadwal = 10;
+  const itemjadwal = 1;
 
   useEffect(() => {
-    // Ambil data services
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/services`)
-      .then((response) => {
-        if (response.data.success) {
-          setServices(response.data.data);
-        } else {
-          console.error("Failed to fetch services");
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching services", error);
-      });
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decoded = jwtDecode(token); // Mendekode token
+        setUser(decoded); // Menyimpan hasil dekode ke state user
+      } catch (error) {
+        console.error("Error decoding token", error);
+        setError("Invalid token format or missing parts."); // Menangani error
+        navigate("/login"); // Navigasi ke login jika token tidak valid
+      }
+    } else {
+      console.log("No token found");
+      navigate("/login"); // Navigasi ke login jika tidak ada token
+    }
+    const fetchData = async () => {
+      try {
+        axios
+          .get(`${process.env.REACT_APP_API_URL}/services`)
+          .then((response) => {
+            if (response.data.success) {
+              setServices(response.data.data);
+            } else {
+              console.error("Failed to fetch services");
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching services", error);
+          });
 
-    // Ambil data workers
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/pekerja`)
-      .then((response) => {
-        if (response.data.success) {
-          setWorkers(response.data.data);
-        } else {
-          console.error("Failed to fetch workers");
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching workers", error);
-      });
+        // Ambil data workers
+        axios
+          .get(`${process.env.REACT_APP_API_URL}/pekerja`)
+          .then((response) => {
+            if (response.data.success) {
+              setWorkers(response.data.data);
+            } else {
+              console.error("Failed to fetch workers");
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching workers", error);
+          });
 
-    // Ambil data schedules
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/schedules`)
-      .then((response) => {
-        setSchedules(response.data.schedule);
-      })
-      .catch((error) => {
-        console.error("Error fetching schedules", error);
-      });
+        // Ambil data schedules
+        axios
+          .get(`${process.env.REACT_APP_API_URL}/schedules`)
+          .then((response) => {
+            setSchedules(response.data.schedule);
+          })
+          .catch((error) => {
+            console.error("Error fetching schedules", error);
+          });
+      } catch (error) {
+        console.error("Error fetching data", error);
+      }
+    };
+    fetchData();
   }, []);
 
   const startIndexServices = currentPage * itemsPerPage;
@@ -71,18 +96,38 @@ const BookingList = () => {
   const endIndexjadwal = startIndexjadwal + itemjadwal;
   const currentjadwal = schedules.slice(startIndexjadwal, endIndexjadwal);
 
-  const handleServiceClick = (serviceId) => {
-    setSelectedServiceId(serviceId);
+  const handleServiceClick = (service_id) => {
+    setSelectedServiceId(service_id);
   };
 
   const handleWorkerClick = (user_id) => {
     setSelectedWorkerId(user_id);
-    console.log(user_id);
   };
 
   const handleKonfirmasi = (schedule_id) => {
     setSelectedkonfirmasi(schedule_id);
   };
+  const handleBooking = () => {
+    const reservation = {
+      service_id: selectedServiceId,
+      worker_id: selectedWorkerId,
+      schedule_id: selectedkonfirmasi,
+      user_id: user.user_id,
+    };
+    axios
+      .post(`${process.env.REACT_APP_API_URL}/reservations`, reservation)
+      .then((response) => {
+        const reservations = response.data.reservations;
+
+        // Simpan data ke local storage
+        localStorage.setItem("reservations", JSON.stringify(reservations));
+        setSelectedServiceId(null);
+        setSelectedWorkerId(null);
+        setSelectedkonfirmasi(null);
+      })
+      .catch((error) => console.error("Error booking", error));
+  };
+
   const backToServices = () => {
     setSelectedServiceId(null);
   };
@@ -115,7 +160,6 @@ const BookingList = () => {
   const handleDateClick = (date) => {
     setSelectedDate(date); // Menyimpan tanggal yang dipilih
     const formattedDate = date.toISOString().split("T")[0]; // Format tanggal menjadi YYYY-MM-DD
-
     // Mencari jadwal yang sesuai dengan worker dan tanggal yang dipilih
     const availableSchedule = schedules.find(
       (schedule) =>
@@ -251,15 +295,13 @@ const BookingList = () => {
               </h2>
               <button onClick={backToWorkers}>Back to Workers</button>
             </div>
-            <div>
+            <div className="calender">
               <Calendar
-                minDate={new Date()} // Menetapkan batas tanggal minimum pada hari ini
-                tileDisabled={({ date }) => !filterFutureDates(date)} // Menonaktifkan tanggal yang sudah lewat
+                minDate={new Date()} // Tanggal minimum hari ini
+                tileDisabled={({ date }) => date < new Date()} // Menonaktifkan tanggal sebelum hari ini
                 onClickDay={handleDateClick} // Menangani klik tanggal
               />
             </div>
-
-            {/* Tampilkan informasi jadwal jika ada */}
             {selectedSchedule ? (
               <div>
                 {currentjadwal.length > 0 ? (
@@ -282,6 +324,7 @@ const BookingList = () => {
           </div>
         </div>
       )}
+
       {selectedkonfirmasi !== null && (
         <div id="konfirmasi" className="text-center">
           <div className="container">
@@ -291,6 +334,58 @@ const BookingList = () => {
                 <span>BOOKING</span>
               </h2>
             </div>
+            <div id="tabel">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Hour</th>
+                    <th>Worker</th>
+                    <th>Service</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {schedules &&
+                    services &&
+                    schedules
+                      .filter(
+                        (schedule) =>
+                          schedule.schedule_id === selectedkonfirmasi
+                      )
+                      .map((schedule) => {
+                        const worker = workers.find(
+                          (w) => w.user_id === schedule.worker_id
+                        );
+                        const service = services.find(
+                          (s) => s.service_id === selectedServiceId
+                        );
+                        return (
+                          <tr key={schedule.schedule_id}>
+                            <td>{schedule.available_date}</td>
+                            <td>{schedule.available_time_start}</td>
+                            <td>{worker ? worker.name : "Unknown Worker"}</td>
+                            <td>
+                              {service
+                                ? service.service_name
+                                : "Unknown Service"}
+                            </td>
+                            <td>
+                              {service ? service.description : "No Description"}
+                            </td>
+                            <td>
+                              Rp{service ? service.price : "Unknown Duration"}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                </tbody>
+              </table>
+            </div>
+            <button className="konfirmasi" onClick={() => handleBooking()}>
+              Confirm Booking
+            </button>
           </div>
         </div>
       )}

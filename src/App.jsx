@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Navigation } from "./components/navigation";
 import { Header } from "./components/header";
-import { Features } from "./components/features";
+import { Reservation } from "./components/reservation";
 import { About } from "./components/about";
 import { Services } from "./components/services";
 import { Gallery } from "./components/gallery";
@@ -20,6 +20,8 @@ import DataDocumentation from "./components/DataDokumentasi";
 import DataJadwal from "./components/DataJadwal";
 import DataReting from "./components/DataReting";
 import DataJadwalPekerja from "./components/DataJadwalPekerja";
+import DataLaporan from "./components/DataLaporan";
+import DanaPaymentPage from "./components/payment";
 import SmoothScroll from "smooth-scroll";
 import "./App.css";
 
@@ -38,9 +40,10 @@ const App = () => {
         <Route path="/register" element={<Register/>}/>
         <Route path="/booking" element={<Booking/>}/>
         <Route path="/profile" element={<Profile/>}/>
-        {/* <Route path="/dataservice" element={<DataService/>}/>
-        <Route path="/datauser" element={<DataUser/>}/>
-        <Route path="/dataproduct" element={<DataProduct/>}/> */}
+        <Route path="/payment" element={<DanaPaymentPage/>}/>
+        <Route path="/r" element={<Reservation/>}/>
+
+
         
         
         
@@ -51,7 +54,7 @@ const App = () => {
             <div>
               <Navigation/>
               <Header/>
-              <Features />
+              <Reservation />
               <Team />
               <Services/>
               <Gallery />
@@ -70,6 +73,7 @@ const App = () => {
               <DataProduct/>
               <DataService/>
               <DataJadwal/>
+              <DataLaporan/>
             </div>
           }
         />

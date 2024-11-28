@@ -1010,6 +1010,75 @@ h2 span:last-child {
   text-align: center;
   width: 115px;
 }
+#tabel {
+  background-color: #fff;
+  border-radius: 30px;
+  border: solid 2px #d7843e;
+  margin-top: 180px;
+  padding-bottom: 20px;
+}
+#tabel th {
+  padding-top: 15px;
+  padding-left: 100px;
+  color: #d7843e;
+}
+#tabel td {
+  padding-left: 100px;
+  color: #000;
+}
+.konfirmasi{
+  border: solid 2px #d7843e;
+  border-radius: 20px;
+  color: #0b161a;
+  background-color: #fff;
+  margin-top: 20px;
+  margin-left: 1000px;
+}
+#reservation {
+  height: 100%;
+  background: url("../img/reservation.jpg") no-repeat;
+  background-color: #0b161a;
+  background-size: 100% 100%;
+  background-position:center;
+  background-position-y:-150px;
+
+
+}
+#reservation h2{
+  color: #d7843e;
+  font-family: "Jaini", sans-serif;
+  margin-left: 40px;
+  padding-top: 90px;
+  font-size: 60px;
+  
+}
+#reservation .container{
+ width: 70%;
+ border: 2px solid #d7843e; 
+ color: #d7843e;
+ background-color: #0b161a;
+ margin: 100px auto;
+}
+/* Container dengan scroll */
+.reservations-scrollable {
+  max-height: 265px; /* Tinggi maksimal untuk tampilan satu item */
+  overflow-y: auto; /* Aktifkan scroll secara vertikal */
+  border: 1px solid #ccc; /* Opsional: Tambahkan border */
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+/* Gaya untuk setiap item reservasi */
+.reservation-item {
+  margin-bottom: 10px; /* Jarak antar item */
+  padding: 10px;
+  border: 1px solid #ddd; /* Opsional: Tambahkan border pada setiap item */
+  border-radius: 5px; /* Opsional: Buat sudut melengkung */
+}
+
+
 
 .modal {
   display: block; /* Jangan lupa memastikan display diatur */
@@ -1113,8 +1182,69 @@ h2 span:last-child {
 }
 #jadwal {
   background-color: #0b161a;
-  height: 100%;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+  text-align: center;
 }
+
+#jadwal h2 {
+  font-family: 'Arial', sans-serif;
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+#jadwal button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 20px;
+}
+
+#jadwal button:hover {
+  background-color: #0056b3;
+}
+
+.calender {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.react-calendar {
+  width: 80%;
+  max-width: 500px;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.react-calendar__month-view__days__day:nth-child(7n) {
+  color: red; /* Warna merah untuk hari Minggu */
+}
+
+.react-calendar__tile--now {
+  background-color: #007bff !important;
+  color: white !important;
+}
+
+.react-calendar__tile--now:hover {
+  background-color: #0056b3 !important;
+}
+
+.react-calendar__tile--disabled {
+  background-color: #e9ecef !important;
+  color: #6c757d !important;
+  cursor: not-allowed !important;
+}
+
+
 #konfirmasi {
   background-color: #0b161a;
   height: 100%;
@@ -1126,7 +1256,7 @@ h2 span:last-child {
   border-radius: 30px;
   z-index: 1;
   margin-left: 570px;
-  margin-top: 105px;
+  margin-top: 75px;
   object-fit: none;
 }
 

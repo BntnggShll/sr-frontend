@@ -260,7 +260,7 @@ const DataDocumentation = () => {
                       key={reservation.service.service_name}
                       value={reservation.reservation_id}
                     >
-                      {reservation.service.service_name}
+                      {reservation.user.name+" "+reservation.service.service_name}
                     </option>
                   ))}
                 </select>
