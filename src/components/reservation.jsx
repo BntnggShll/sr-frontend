@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode"; // Perbaikan impor
 import { useNavigate } from "react-router-dom";
 
 export const Reservation = () => {
@@ -13,18 +13,16 @@ export const Reservation = () => {
     if (token) {
       try {
         const decoded = jwtDecode(token);
-        console.log(decoded);
-        setUser(decoded);
+        setUser(decoded); // Menyimpan data user
       } catch (error) {
         console.error("Error decoding token", error);
         setError("Invalid token format or missing parts.");
-        navigate("/login");
       }
-    } else {
-      console.log("No token found");
-      navigate("/login");
     }
+  }, [navigate]);
 
+
+  useEffect(() => {
     const storedReservations = localStorage.getItem("reservations");
     if (storedReservations) {
       try {
@@ -35,7 +33,7 @@ export const Reservation = () => {
         setError("Failed to load reservations.");
       }
     }
-  }, [navigate]);
+  }, []);
 
   if (error) {
     return <div>{error}</div>;

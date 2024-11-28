@@ -19,7 +19,7 @@ const BookingList = () => {
   const [selectedSchedule, setSelectedSchedule] = useState(null); // Menyimpan jadwal yang dipilih
   const workersPerPage = 3;
   const itemsPerPage = 8;
-  const itemjadwal = 1;
+  const itemjadwal = 10;
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -105,6 +105,7 @@ const BookingList = () => {
   };
 
   const handleKonfirmasi = (schedule_id) => {
+    console.log(schedule_id);
     setSelectedkonfirmasi(schedule_id);
   };
   const handleBooking = () => {
@@ -113,7 +114,7 @@ const BookingList = () => {
       worker_id: selectedWorkerId,
       schedule_id: selectedkonfirmasi,
       user_id: user.user_id,
-    };
+    };  
     axios
       .post(`${process.env.REACT_APP_API_URL}/reservations`, reservation)
       .then((response) => {
@@ -156,27 +157,24 @@ const BookingList = () => {
     }
   };
 
-  // Fungsi untuk menangani klik pada tanggal di kalender
   const handleDateClick = (date) => {
     setSelectedDate(date); // Menyimpan tanggal yang dipilih
-    const formattedDate = date.toISOString().split("T")[0]; // Format tanggal menjadi YYYY-MM-DD
-    // Mencari jadwal yang sesuai dengan worker dan tanggal yang dipilih
-    const availableSchedule = schedules.find(
+    const formattedDate = new Intl.DateTimeFormat("en-CA", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(date);
+
+    // Filter semua jadwal yang sesuai
+    const availableSchedules = schedules.filter(
       (schedule) =>
         schedule.worker_id === selectedWorkerId &&
         schedule.available_date === formattedDate &&
         schedule.status === "Available"
     );
 
-    if (availableSchedule) {
-      setSelectedSchedule(availableSchedule); // Menyimpan jadwal yang dipilih
-    } else {
-      setSelectedSchedule(null); // Tidak ada jadwal yang tersedia
-    }
-  };
-
-  const filterFutureDates = (date) => {
-    return date >= new Date(); // Menampilkan hanya tanggal yang lebih besar atau sama dengan hari ini
+    setSelectedSchedule(availableSchedules);
+    console.log(availableSchedules);
   };
 
   return (
@@ -287,25 +285,19 @@ const BookingList = () => {
       {/* Section Jadwal */}
       {selectedWorkerId !== null && selectedkonfirmasi === null && (
         <div id="jadwal" className="text-center">
-          <div className="container">
-            <div className="col-md-8 col-md-offset-2 section-title">
-              <h2>
-                <span>PILIH</span>
-                <span>JADWAL</span>
-              </h2>
-              <button onClick={backToWorkers}>Back to Workers</button>
-            </div>
-            <div className="calender">
-              <Calendar
-                minDate={new Date()} // Tanggal minimum hari ini
-                tileDisabled={({ date }) => date < new Date()} // Menonaktifkan tanggal sebelum hari ini
-                onClickDay={handleDateClick} // Menangani klik tanggal
-              />
-            </div>
+          <h2>
+            <span>PILIH</span>
+            <span>JADWAL</span>
+          </h2> 
+          <button onClick={backToWorkers}>Back to Workers</button>
+          <div className="calender">
+            <Calendar 
+            minDate={new Date()}
+            onClickDay={handleDateClick} />
             {selectedSchedule ? (
               <div>
-                {currentjadwal.length > 0 ? (
-                  currentjadwal.map((jadwal) => (
+                {selectedSchedule.length > 0 ? (
+                  selectedSchedule.map((jadwal) => (
                     <p key={jadwal.schedule_id}>
                       <button
                         onClick={() => handleKonfirmasi(jadwal.schedule_id)}

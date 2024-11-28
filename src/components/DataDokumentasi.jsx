@@ -255,14 +255,18 @@ const DataDocumentation = () => {
                   required
                 >
                   <option value="">Select Reservation</option>
-                  {reservations.map((reservation) => (
-                    <option
-                      key={reservation.service.service_name}
-                      value={reservation.reservation_id}
-                    >
-                      {reservation.user.name+" "+reservation.service.service_name}
-                    </option>
-                  ))}
+                  {reservations
+                    .filter((reservation) => reservation.reservation_status !== "Completed")
+                    .map((reservation) => (
+                      <option
+                        key={reservation.service.service_name}
+                        value={reservation.reservation_id}
+                      >
+                        {reservation.user.name +
+                          " " +
+                          reservation.service.service_name}
+                      </option>
+                    ))}
                 </select>
               </div>
               <div className="form-group">

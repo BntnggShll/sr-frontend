@@ -52,7 +52,7 @@ export const Team = (props) => {
         <div className="row">
           {currentWorkers.length > 0 ? (
             currentWorkers.map((wo) => (
-              <div key={wo.id} className="col-md-4">
+              <div key={wo.user_id} className="col-md-4">
                 <img
                   src={wo.image}
                   alt="Worker"
