@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode"; // Perbaikan impor
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export const Reservation = () => {
   const [user, setUser] = useState(null);
@@ -13,7 +14,7 @@ export const Reservation = () => {
     if (token) {
       try {
         const decoded = jwtDecode(token);
-        setUser(decoded); // Menyimpan data user
+        setUser(decoded); 
       } catch (error) {
         console.error("Error decoding token", error);
         setError("Invalid token format or missing parts.");
@@ -23,17 +24,25 @@ export const Reservation = () => {
 
 
   useEffect(() => {
-    const storedReservations = localStorage.getItem("reservations");
-    if (storedReservations) {
-      try {
-        const parsedReservations = JSON.parse(storedReservations);
-        setReservations(parsedReservations);
-      } catch (error) {
-        console.error("Error parsing reservations from localStorage", error);
-        setError("Failed to load reservations.");
-      }
+    if (user) {
+      axios
+        .get(`${process.env.REACT_APP_API_URL}/reservations`)
+        .then((response) => {
+          const reservations = response.data.data;
+
+          // Memfilter sesuai dengan user.name
+          const filteredReservations = reservations.filter(
+            (reservation) => reservation.user.name === user.name && reservation.reservation_status === "Confirmed"
+          );
+
+          setReservations(filteredReservations);
+        })
+        .catch((error) => {
+          console.error("Error fetching reservations", error);
+          setError("Failed to fetch reservations.");
+        });
     }
-  }, []);
+  }, [user]);
 
   if (error) {
     return <div>{error}</div>;

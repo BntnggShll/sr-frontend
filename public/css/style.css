@@ -413,12 +413,19 @@ header .intro-text {
   opacity: 1;
 }
 /* rating Section */
-#rating { 
-  background: #0b161a;
+#rating {
+  /* position:fixed; */
+  height: 100vh; /* Tinggi penuh layar */
+  width: 100vW;
+  background-color: #0b161a; /* Warna latar opsional */
 }
-#rating h2 {
-  margin: 20px;
+
+.title {
+  display: flex;
+  width: 100%; 
+  box-sizing: border-box;
 }
+
 #rating h2 span:first-child {
   font-family: "Jaini", sans-serif;
   color: #d7843e;
@@ -430,7 +437,114 @@ header .intro-text {
   color: #fff;
   font-size: 40px;
 }
+#rating .right{
+  margin-left: 35%;
+  padding-top: 60px;
+}
+#rating .left{
+  padding-top: 60px;
+  padding-left: 30px;
+}
+#rating .reting{
+  position: absolute;
+  height: 75%;
+  width: 50%;
+  border-radius: 20px;
+  background-color: #d9d9d9;
+  padding: 20px;
+}
+#rating .feedback{
+  height: 25%;
+  border-radius: 20px;
+  background-color: #d9d9d9;
+  margin-bottom: 30px;
+  padding: 20px;
+}
+.feedback-container{
+  max-height: 80%;
+  width: 205%;
+  overflow-y: auto;
+}
+*::-webkit-scrollbar {
+  display: none; /* Hapus scrollbar di browser berbasis WebKit (Chrome, Safari, Edge) */
+}
+.star {
+  font-size: 24px;
+  color: #fff;
+}
 
+.star.filled {
+  color: gold; /* Warna bintang penuh */
+}
+.star.half {
+  color: linear-gradient(to right, gold 50%, lightgray 50%); /* Bintang setengah penuh */
+  -webkit-background-clip: text;
+}
+.stars{
+  display: flex;
+  align-items: center;
+}
+.stars h2{
+  margin-right: 10px;
+  color: #000000;
+}
+.stars p{
+  margin-right: 15px;
+  color: #000;
+  font-weight:600;
+}
+.rating-distribution {
+  margin-top: 20px;
+}
+
+.rating-distribution-bar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.rating-distribution-bar span {
+  margin-right: 10px;
+  font-size: 16px;
+  color: #555;
+}
+
+.rating-bar {
+  height: 20px;
+  margin-left: 10px;
+  border-radius: 5px;
+}
+
+.rating-distribution-bar span:last-child {
+  margin-left: auto;
+  font-size: 14px;
+  color: #777;
+}
+
+.input{
+  width: 100%;
+  height: 70px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  resize: none;
+  color: #000000;
+}
+.reviewinput{
+  margin-top: 20px;
+  width: 20%;
+  height: 35px;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  background: #d7843e;
+}
+.dropdown{
+  background: transparent;
+  border: none;
+  padding-left: auto;
+}
+/* Team Section */
 /* Team Section */
 #team  {
   padding: 100px 0;
@@ -1238,6 +1352,7 @@ h2 span:last-child {
   margin-top: 75px;
   object-fit: none;
 }
+
 
 @media (max-width: 768px) {
   #about img {

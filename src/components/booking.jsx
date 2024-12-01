@@ -3,6 +3,9 @@ import axios from "axios";
 import Calendar from "react-calendar";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const BookingList = () => {
   const navigate = useNavigate();
@@ -105,7 +108,6 @@ const BookingList = () => {
   };
 
   const handleKonfirmasi = (schedule_id) => {
-    console.log(schedule_id);
     setSelectedkonfirmasi(schedule_id);
   };
   const handleBooking = () => {
@@ -118,10 +120,6 @@ const BookingList = () => {
     axios
       .post(`${process.env.REACT_APP_API_URL}/reservations`, reservation)
       .then((response) => {
-        const reservations = response.data.reservations;
-
-        // Simpan data ke local storage
-        localStorage.setItem("reservations", JSON.stringify(reservations));
         setSelectedServiceId(null);
         setSelectedWorkerId(null);
         setSelectedkonfirmasi(null);
@@ -174,7 +172,6 @@ const BookingList = () => {
     );
 
     setSelectedSchedule(availableSchedules);
-    console.log(availableSchedules);
   };
 
   return (

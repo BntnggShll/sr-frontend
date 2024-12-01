@@ -70,7 +70,7 @@ const Login = () => {
           {/* <a href="http://127.0.0.1:8000/api/auth/google" className="btn btn-primary">aa</a> */}
         </div>
       </div>
-      <ToastContainer /> {/* Pastikan ToastContainer berada di dalam komponen */}
+      <ToastContainer /> 
     </div>
   );
 };
