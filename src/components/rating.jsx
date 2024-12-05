@@ -4,7 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 
 export const Rating = () => {
-  const [reviews, setReviews] = useState(null);
+  const [reviews, setReviews] = useState([]);
   const [Reservation, setReservation] = useState([]);
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
@@ -109,7 +109,15 @@ export const Rating = () => {
         })
         .then((response) => {
           alert("Review submitted successfully!");
-          setReviews([...reviews, response.data.review]);
+          console.log(response.data.review);
+          axios
+          .get(`${process.env.REACT_APP_API_URL}/reviews`)
+          .then((response) => {
+            setReviews(response.data); 
+          })
+          .catch((error) => {
+            console.error("Error fetching updated reviews:", error);
+          });
           setFeedbackValue("");
           setSelectedReservation("");
           setSelectedRating(0);
@@ -131,6 +139,7 @@ export const Rating = () => {
   );
 
   const maxReviews = Math.max(...ratingCounts);
+
   return (
     <div id="rating">
       <div className="title">
@@ -147,11 +156,13 @@ export const Rating = () => {
                     <h2>{averageRating.toFixed(1)}</h2>
                   </span>
                   <span>
-                    <p>
+                    <p> 
                       Out of <br /> 5 stars{" "}
                     </p>
                   </span>
-                  <span>{renderStars(averageRating)}</span>
+                  <span>
+                    {renderStars(averageRating)}
+                  </span>
                 </div>
                 <div className="rating-distribution">
                   {ratingCounts.map((count, index) => (
@@ -160,7 +171,7 @@ export const Rating = () => {
                       <div
                         className="rating-bar"
                         style={{
-                          width: `${(count / maxReviews) * 60}%`,
+                          width: `${(count / maxReviews) * 83}%`,
                           backgroundColor: "#D7843E",
                         }}
                       ></div>
@@ -172,8 +183,7 @@ export const Rating = () => {
                 <select
                   value={selectedReservation}
                   onChange={(e) => {
-                    const [reservationId, workerId] =
-                      e.target.value.split(",");
+                    const [reservationId, workerId] = e.target.value.split(",");
                     setSelectedReservation({
                       reservationId,
                       workerId,
@@ -231,7 +241,48 @@ export const Rating = () => {
             <span>Customer</span>
             <span>Feedback</span>
           </h2>
-          <div className="feedback-container"></div>
+          <div className="feedback-container">
+            {reviews ? (
+              reviews.map((review) => (
+                <div key={review.review_id} className="feedback">
+                    <img
+                      src={review.user.image}
+                      alt={review.user.name}
+                      style={{
+                        width: "60px",
+                        height: "60px",
+                        borderRadius: "100px",
+                      }}
+                    />
+                  <span>
+                    <h3 style={{ marginLeft: "20px", marginTop: "10px" }}>
+                      {review.user.name}
+                    </h3>
+                  </span>
+                  <span>
+                    <h6 style={{ marginTop: "40px", marginLeft: "-71px" }}>
+                      {review.formatted_date}
+                    </h6>
+                  </span>
+                  <span style={{ marginLeft: "300px", marginTop: "-10px" }}>
+                    {renderStars(review.rating)}
+                  </span>
+                  <p
+                    style={{
+                      marginTop: "75px",
+                      marginLeft: "-550px",
+                      width: "550px",
+                      wordWrap: "break-word",
+                    }}
+                  >
+                    {review.feedback}
+                  </p>
+                </div>
+              ))
+            ) : (
+              <p>No feedback available</p>
+            )}
+          </div>
         </div>
       </div>
     </div>

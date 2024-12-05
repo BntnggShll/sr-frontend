@@ -418,6 +418,7 @@ header .intro-text {
   height: 100vh; /* Tinggi penuh layar */
   width: 100vW;
   background-color: #0b161a; /* Warna latar opsional */
+  overflow: hidden;
 }
 
 .title {
@@ -453,18 +454,23 @@ header .intro-text {
   background-color: #d9d9d9;
   padding: 20px;
 }
+.feedback-container{
+  height: 490px;
+  overflow-y:scroll;
+  overflow-x: hidden;
+}
 #rating .feedback{
-  height: 25%;
+  display: flex;
+  max-height: 500px;
+  width: 600px;
   border-radius: 20px;
   background-color: #d9d9d9;
   margin-bottom: 30px;
   padding: 20px;
+  
+  
 }
-.feedback-container{
-  max-height: 80%;
-  width: 205%;
-  overflow-y: auto;
-}
+
 *::-webkit-scrollbar {
   display: none; /* Hapus scrollbar di browser berbasis WebKit (Chrome, Safari, Edge) */
 }

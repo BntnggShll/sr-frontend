@@ -69,7 +69,7 @@ function DataLaporan() {
                 <td>{rating.service.service_name}</td>
                 <td>{rating.worker.name || "N/A"}</td>
                 <td>{rating.reservation_status}</td>
-                <td>{rating.updated_at}</td>
+                <td>{rating.formatted_date}</td>
 
               </tr>
             ))}
