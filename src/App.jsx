@@ -75,6 +75,7 @@ const App = () => {
               <DataService/>
               <DataJadwal/>
               <DataLaporan/>
+              <DataHapusReview/>
             </div>
           }
         />
