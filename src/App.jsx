@@ -23,6 +23,9 @@ import DataJadwalPekerja from "./components/DataJadwalPekerja";
 import DataLaporan from "./components/DataLaporan";
 import DanaPaymentPage from "./components/payment";
 import DataHapusReview from "./components/DataHapusReview";
+import DataKeuangan from "./components/DataKeuangan"
+import Detailproduk from "./components/detailproduk";
+import Cart from "./components/Cart";
 import SmoothScroll from "smooth-scroll";
 import "./App.css";
 
@@ -42,7 +45,9 @@ const App = () => {
         <Route path="/booking" element={<Booking/>}/>
         <Route path="/profile" element={<Profile/>}/>
         <Route path="/payment" element={<DanaPaymentPage/>}/>
-        <Route path="/r" element={<DataHapusReview/>}/>
+        <Route path="/product/:productId" element={<Detailproduk/>}/>
+        <Route path="/cart" element={<Cart/>}/>
+
 
 
         
@@ -70,6 +75,7 @@ const App = () => {
           path="/admin"
           element={
             <div>
+              <DataKeuangan/>
               <DataUser/>
               <DataProduct/>
               <DataService/>

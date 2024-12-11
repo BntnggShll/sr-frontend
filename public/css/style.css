@@ -471,6 +471,20 @@ header .intro-text {
   
 }
 
+.table tbody {
+  display: block;
+  max-height: 390px; /* Atur tinggi maksimal sesuai kebutuhan */
+  overflow-y: auto;
+}
+
+.table thead,
+.table tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed; /* Pastikan kolom tetap sejajar */
+}
+
+
 *::-webkit-scrollbar {
   display: none; /* Hapus scrollbar di browser berbasis WebKit (Chrome, Safari, Edge) */
 }
@@ -1104,6 +1118,7 @@ h2 span:last-child {
 #table {
   background-color: #fff;
   margin: 30px 50px;
+  padding-top: 10px;
   filter: drop-shadow(0 4px 8px rgba(44, 43, 43, 0.5));
 }
 #table th {
@@ -1342,7 +1357,16 @@ h2 span:last-child {
   color: #6c757d !important;
   cursor: not-allowed !important;
 }
-
+/* keuangan */
+#keuangan{
+background: #0b161a;
+max-height:1000vh ;
+padding: 35px;
+}
+#keuangan h2{
+  font-family: "Jaini", sans-serif;
+  color: #d7843e;
+}
 
 #konfirmasi {
   background-color: #0b161a;
@@ -1364,4 +1388,14 @@ h2 span:last-child {
   #about img {
     margin: 50px 0;
   }
+}
+
+#cart{
+  background-color: #0b161a;
+  padding: "20px";
+  display: "flex";
+  justify-Content: "center"
+}
+#cart h2{
+  font-family: "Jaini", sans-serif;
 }

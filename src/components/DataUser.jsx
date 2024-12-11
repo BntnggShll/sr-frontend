@@ -173,7 +173,7 @@ const DataUser = () => {
               <form onSubmit={handleAddPekerja}>
                 <div className="form-group">
                   <label>Nama:</label>
-                  <input
+                  <input 
                     type="text"
                     className="form-control"
                     value={newPekerja.name}
