@@ -1394,8 +1394,20 @@ padding: 35px;
   background-color: #0b161a;
   padding: "20px";
   display: "flex";
-  justify-Content: "center"
+  justify-Content: "center";
+  max-height:1000vh;
 }
 #cart h2{
   font-family: "Jaini", sans-serif;
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+}
+
+#tablecart{
+  width: 70%;
+  padding: 0px 30px 10px 30px;
+}
+#tablecart th{
+  color: #d7843e;
 }

@@ -25,7 +25,7 @@ import DanaPaymentPage from "./components/payment";
 import DataHapusReview from "./components/DataHapusReview";
 import DataKeuangan from "./components/DataKeuangan"
 import Detailproduk from "./components/detailproduk";
-import Cart from "./components/Cart";
+import Cart from "./components/cart";
 import SmoothScroll from "smooth-scroll";
 import "./App.css";
 

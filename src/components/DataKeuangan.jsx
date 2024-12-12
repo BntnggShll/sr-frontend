@@ -29,9 +29,9 @@ const FinancialReports = () => {
     const fetchData = async () => {
       try {
         const incomeResponse = await axios.get(
-          `${process.env.REACT_APP_API_URL}/income`
+          `${process.env.REACT_APP_API_URL}/payments`
         );
-        setIncome(incomeResponse.data.data);
+        setIncome(incomeResponse.data);
 
         const expenseResponse = await axios.get(
           `${process.env.REACT_APP_API_URL}/expense`
@@ -40,11 +40,11 @@ const FinancialReports = () => {
 
         // Update charts
         updateBarChartData(
-          incomeResponse.data.data,
+          incomeResponse.data,
           expenseResponse.data.data,
           ""
         );
-        updatePieChartData(incomeResponse.data.data, expenseResponse.data.data);
+        updatePieChartData(incomeResponse.data, expenseResponse.data.data);
       } catch (error) {
         console.error("Error fetching financial data:", error);
       }
@@ -57,7 +57,7 @@ const FinancialReports = () => {
     // Ambil semua tanggal dari income dan expense
     const allDates = [
       ...new Set([
-        ...incomeData.map((income) => income.report_date),
+        ...incomeData.map((income) => income.transaction_date),
         ...expenseData.map((expense) => expense.report_date),
       ]),
     ];
@@ -69,7 +69,7 @@ const FinancialReports = () => {
 
     const incomeByDate = filteredDates.map((date) => {
       return incomeData
-        .filter((income) => income.report_date === date) // Cocokkan tanggal
+        .filter((income) => income.transaction_date === date) // Cocokkan tanggal
         .reduce((sum, income) => sum + parseFloat(income.income || 0), 0); // Hitung total income
     });
 
@@ -183,9 +183,9 @@ const FinancialReports = () => {
             <tbody>
               {income.map((item, index) => (
                 <tr key={index}>
-                  <td>{item.income}</td>
-                  <td>{item.description}</td>
-                  <td>{item.report_date}</td>
+                  <td>{item.amount}</td>
+                  <td>{item.payable.service_id}</td>
+                  <td>{item.transaction_date}</td>
                 </tr>
               ))}
             </tbody>
