@@ -715,7 +715,9 @@ h2 span:last-child {
   top: 60px;
   left: 10px;
   border-radius: 30px;
+  border: none;
 }
+
 /* Footer Section*/
 #footer {
   background: #f6f6f6;
@@ -1392,22 +1394,43 @@ padding: 35px;
 
 #cart{
   background-color: #0b161a;
-  padding: "20px";
   display: "flex";
   justify-Content: "center";
-  max-height:1000vh;
+  height:100vh;
 }
 #cart h2{
   font-family: "Jaini", sans-serif;
   display: flex;
   justify-content: center;
   padding-top: 20px;
+  color: #d7843e;
 }
 
 #tablecart{
   width: 70%;
-  padding: 0px 30px 10px 30px;
+  padding: 0px 30px 10px 70px;
 }
 #tablecart th{
   color: #d7843e;
+}
+#tablecart tbody{
+  max-height: 50%;
+  
+}
+
+
+.summary{
+  padding: 20px;
+  background-color: #D9D9D9;
+  height: 250px;
+  width: 350px;
+}
+
+.x{
+  height: 20px;
+  width: 20px;
+  fill: #d7843e;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

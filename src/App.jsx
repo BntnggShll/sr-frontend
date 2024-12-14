@@ -8,7 +8,6 @@ import { Gallery } from "./components/gallery";
 import { Rating } from "./components/rating";
 import { Team } from "./components/Team";
 import  {Product } from "./components/product";
-import Poin  from "./components/poin";
 import  Login from "./components/login";
 import Register from "./components/register";
 import Booking from "./components/booking";
@@ -65,7 +64,6 @@ const App = () => {
               <Services/>
               <Gallery />
               <Rating />
-              <Poin/>
               <Product/>
               <About />
             </div>

@@ -1,26 +1,25 @@
 import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
+import axios from 'axios';
 import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Product = () => {
-  const [products, setProducts] = useState([]);
-  const [currentPage, setCurrentPage] = useState(0);
-  const productsPerPage = 3;
   const navigate = useNavigate();
+  const [products, setProducts] = useState([]); 
+  const [currentPage, setCurrentPage] = useState(0); 
+  const productsPerPage = 3; 
 
   // Mengambil data dari API
   useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/products`)
-      .then((response) => {
+    axios.get(`${process.env.REACT_APP_API_URL}/products`)
+      .then(response => {
         if (response.data.success) {
           setProducts(response.data.product);
         } else {
           console.error("Failed to fetch products");
         }
       })
-      .catch((error) => {
+      .catch(error => {
         console.error("Error fetching products", error);
       });
   }, []);
@@ -56,37 +55,29 @@ export const Product = () => {
       <div id="product">
         <div className="container">
           <div className="section-title">
-            <h2>
-              <span>Our</span> <span>Products</span>
-            </h2>
+            <h2><span>Our</span> <span>Products</span></h2>
           </div>
           <div className="row">
-            {currentProducts.map((product) => (
-              <div key={product.product_id} className="col-md-4">
+            {currentProducts.map((product, index) => (
+              <div 
+                key={product.product_id } 
+                className={`col-md-4  ${index % 2 === 0 ? 'even-class' : 'odd-class'}`}>
                 <div className="product-item">
-                  {/* Link ke halaman detail produk */}
-                  <Link to={`/product/${product.product_id}`}>
+                <Link to={`/product/${product.product_id}`}>
                     <img
                       src={product.image}
                       alt={product.name}
                       className="img-fluid"
                     />
                   </Link>
-                  {/* Tombol Buy Now */}
-                  <button
-                    className="btn btn-primary mt-2"
-                    onClick={() =>
+                  <a href="" onClick={() =>
                       handleBuyNow(product.product_id, 1, product.price)
-                    }
-                  >
-                    Buy Now!
-                  </button>
+                    }><button className="btn">Buy Now!</button></a>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Navigasi Pagination */}
           <div className="pagination">
             <button onClick={prevPage} disabled={currentPage === 0}>
               Previous

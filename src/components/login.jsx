@@ -12,11 +12,17 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/login`, { email, password });
-      
+  
+      // Menyimpan token dan menampilkan notifikasi sukses
       localStorage.setItem('token', response.data.token);
-      navigate('/');
+      toast.success("Login Success", {
+        position: "top-center",
+        autoClose: 300,
+        onClose: () => {
+          navigate('/'); // Navigasi setelah toast ditutup
+        }
+      });
     } catch (error) {
-      // Menampilkan notifikasi jika login gagal
       toast.error("Login failed. Please check your email and password.", {
         position: "top-center",
         autoClose: 3000,
@@ -26,9 +32,11 @@ const Login = () => {
         draggable: true,
         progress: undefined,
       });
+  
       console.error("Login failed", error);
     }
   };
+  
 
   return (
     <div id="login">

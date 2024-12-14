@@ -70,7 +70,7 @@ const FinancialReports = () => {
     const incomeByDate = filteredDates.map((date) => {
       return incomeData
         .filter((income) => income.transaction_date === date) // Cocokkan tanggal
-        .reduce((sum, income) => sum + parseFloat(income.income || 0), 0); // Hitung total income
+        .reduce((sum, income) => sum + parseFloat(income.amount || 0), 0); // Hitung total income
     });
 
     const expenseByDate = filteredDates.map((date) => {
@@ -98,11 +98,11 @@ const FinancialReports = () => {
 
   const updatePieChartData = (incomeData, expenseData) => {
     const totalIncome = incomeData.reduce(
-      (acc, item) => acc + parseFloat(item.income || 0),
+      (acc, item) => acc + parseFloat(item.amount || 0),
       0
     );
     const totalExpense = expenseData.reduce(
-      (acc, item) => acc + parseFloat(item.expense || 0),
+      (acc, item) => acc + parseFloat(item.amount || 0),
       0
     );
     const netProfit = totalIncome - totalExpense;
@@ -146,7 +146,7 @@ const FinancialReports = () => {
       <div>
         <label htmlFor="month-select">
           <strong>Month:</strong>
-        </label>
+        </label>  
         <select
           id="month-select"
           value={selectedMonth}
@@ -157,7 +157,7 @@ const FinancialReports = () => {
           {[
             ...new Set(
               [...income, ...expense].map((item) =>
-                item.report_date.slice(0, 7)
+                item.transaction_date.slice(0, 7)
               )
             ),
           ].map((month, index) => (
@@ -184,7 +184,7 @@ const FinancialReports = () => {
               {income.map((item, index) => (
                 <tr key={index}>
                   <td>{item.amount}</td>
-                  <td>{item.payable.service_id}</td>
+                  <td>{item.payable.description}</td>
                   <td>{item.transaction_date}</td>
                 </tr>
               ))}

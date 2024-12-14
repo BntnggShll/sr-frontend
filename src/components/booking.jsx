@@ -120,6 +120,7 @@ const BookingList = () => {
     axios
       .post(`${process.env.REACT_APP_API_URL}/reservations`, reservation)
       .then((response) => {
+        alert('sucses');
         setSelectedServiceId(null);
         setSelectedWorkerId(null);
         setSelectedkonfirmasi(null);
