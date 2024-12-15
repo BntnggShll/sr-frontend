@@ -1467,3 +1467,59 @@ padding: 35px;
 #payment h2{
   text-align: center;
 }
+
+#subscripe {
+  background-color: #0b161a;
+  height: 100vh;
+  width: 100vw;
+  display: flex; 
+  justify-content: center;
+  align-items: center; 
+}
+
+#subscripe .container {
+  background-color: #202B2D;
+  display: flex;
+  height: 70%;
+  width: 70%;
+  justify-content: center;
+  border-radius:40px ;
+  padding: 80px;
+}
+
+#subscripe h2 {
+  font-family: 'jaini',sans-serif;
+  color: #d7843e;
+  font-size: 60px;
+  font-weight: 100;
+}
+
+#subscripe p{
+  color: #fff;
+}
+
+.email{
+  fill: #FFF;
+  background-color: #d7843e;
+  width: 50px;
+  height: 25px;
+  margin-bottom: -6.6px;
+}
+#subscripe input{
+  height: 25px;
+  width:50%;
+  border: none;
+  margin-bottom:20px ;
+  margin-top: 15px;
+}
+#subscripe input::placeholder{
+  color: #d7843e;
+}
+#subscripe button{
+background-color: #d7843e;
+border: none;
+color: #fff;
+height: 15%;
+width: 30%;
+}
+

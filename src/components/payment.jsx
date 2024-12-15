@@ -111,6 +111,12 @@ const StripePayment = () => {
         } else {
           setErrorMessage(response.data.message || "Payment failed.");
         }
+        if (setSuccessMessage) {
+          setTimeout(() => {
+            navigate("/");
+          }, 1000); // Delay selama 2 detik (2000 milidetik)
+        }
+        
       } catch (error) {
         setErrorMessage("An error occurred.");
       }

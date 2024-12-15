@@ -24,6 +24,7 @@ import DanaPaymentPage from "./components/payment";
 import DataHapusReview from "./components/DataHapusReview";
 import DataKeuangan from "./components/DataKeuangan"
 import Detailproduk from "./components/detailproduk";
+import Subscripe from "./components/Subscripe";
 import Cart from "./components/cart";
 import SmoothScroll from "smooth-scroll";
 import "./App.css";
@@ -59,6 +60,7 @@ const App = () => {
             <div>
               <Navigation/>
               <Header/>
+              <Subscripe/>
               <Reservation />
               <Team />
               <Services/>
