@@ -9,10 +9,14 @@ import {
   ArcElement,
   Tooltip,
 } from "chart.js";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Tooltip);
 
 const FinancialReports = () => {
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
   const [income, setIncome] = useState([]);
   const [expense, setExpense] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState("");
@@ -20,11 +24,31 @@ const FinancialReports = () => {
   const [pieChartData, setPieChartData] = useState(null);
   const [showExpenseModal, setShowExpenseModal] = useState(false);
   const [newExpense, setNewExpense] = useState({
+    admin_id: "",
     expense: "",
     description: "",
     report_date: "",
   });
+  useEffect(() => {
+    const token = localStorage.getItem("token"); // Mengambil token dari localStorage
 
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        setNewExpense({
+          ...newExpense,
+          admin_id: decoded.user_id,
+        });
+      } catch (error) {
+        console.error("Error decoding token", error);
+        setError("Invalid token format or missing parts."); // Menangani error
+        navigate("/login"); // Navigasi ke login jika token tidak valid
+      }
+    } else {
+      console.log("No token found");
+      navigate("/login"); // Navigasi ke login jika tidak ada token
+    }
+  }, [navigate]);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -39,11 +63,7 @@ const FinancialReports = () => {
         setExpense(expenseResponse.data.data);
 
         // Update charts
-        updateBarChartData(
-          incomeResponse.data,
-          expenseResponse.data.data,
-          ""
-        );
+        updateBarChartData(incomeResponse.data, expenseResponse.data.data, "");
         updatePieChartData(incomeResponse.data, expenseResponse.data.data);
       } catch (error) {
         console.error("Error fetching financial data:", error);
@@ -102,7 +122,7 @@ const FinancialReports = () => {
       0
     );
     const totalExpense = expenseData.reduce(
-      (acc, item) => acc + parseFloat(item.amount || 0),
+      (acc, item) => acc + parseFloat(item.expense || 0),
       0
     );
     const netProfit = totalIncome - totalExpense;
@@ -146,20 +166,24 @@ const FinancialReports = () => {
       <div>
         <label htmlFor="month-select">
           <strong>Month:</strong>
-        </label>  
+        </label>
         <select
           id="month-select"
           value={selectedMonth}
           onChange={handleMonthChange}
-          style={{border:"none",backgroundColor:"transparent",color:"#d7843e"}}
+          style={{
+            border: "none",
+            backgroundColor: "transparent",
+            color: "#d7843e",
+          }}
         >
           <option value="">All Data</option>
           {[
-            ...new Set(
-              [...income, ...expense].map((item) =>
-                item.transaction_date.slice(0, 7)
-              )
-            ),
+            // Gabungkan bulan dari `income` dan `expense`
+            ...new Set([
+              ...income.map((item) => item.transaction_date.slice(0, 7)), // Ambil bulan dari income
+              ...expense.map((item) => item.report_date.slice(0, 7)), // Ambil bulan dari expense
+            ]),
           ].map((month, index) => (
             <option key={index} value={month}>
               {month}
@@ -301,7 +325,7 @@ const FinancialReports = () => {
 
       {/* Charts */}
       <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <div style={{ flex: 1, maxWidth: "400px", marginLeft: "200px"}}>
+        <div style={{ flex: 1, maxWidth: "400px", marginLeft: "200px" }}>
           <h3>Bar Chart</h3>
           {barChartData ? (
             <Bar
