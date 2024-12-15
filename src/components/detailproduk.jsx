@@ -44,7 +44,7 @@ const DetailProduct = () => {
   const handleBuyNow = () => {
     // Arahkan ke halaman cart dengan mengirimkan data product_id dan stock
     navigate("/cart", {
-      state: { productId: product.product_id, stock: currentStock , price:product.price},
+      state: { productId: product.product_id, name:product.name, stock: currentStock , price:product.price},
     });
   };
 

@@ -1434,3 +1434,36 @@ padding: 35px;
   justify-content: center;
   align-items: center;
 }
+
+.checkout{
+  margin-top: 10px;
+  border: none;
+  width: 100%;
+  height: 30px;
+  background-color: #d7843e;
+  color: #fff;
+}
+
+.stock{
+  background-color:#d7843e;
+  width: 90px;
+  border-radius: 20px;
+  color: #fff;
+  display: flex;
+  margin-top: -4px;
+
+}
+.stockbutton{
+  border: none;
+  background-color: transparent;
+  margin-right: 10px;
+}
+#payment{
+  background-color: #0b161a;
+  width: 100vw;
+  height: 100vh;
+  color: #d7843e;
+}
+#payment h2{
+  text-align: center;
+}

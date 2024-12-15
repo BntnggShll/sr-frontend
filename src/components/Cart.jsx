@@ -1,10 +1,15 @@
+import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Cart = () => {
   const location = useLocation();
-  const { productId, stock, price } = location.state || {}; // Mengambil data dari state
+  const { productId, stock, price, name } = location.state || {};
+  const [product, setProduct] = useState(null); // Mengambil data dari state
   const [cartItems, setCartItems] = useState([]);
+  const [currentStock, setCurrentStock] = useState(stock || 0);
+  const navigate = useNavigate();
 
   // Load cart dari sessionStorage ketika komponen dimount
   useEffect(() => {
@@ -14,16 +19,34 @@ const Cart = () => {
     }
   }, []);
 
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/products/${productId}`
+        );
+        setProduct(response.data);
+        setCurrentStock(response.data.stock); // Set nilai stok berdasarkan data produk
+      } catch (error) {
+        console.error("Error fetching product details:", error);
+      }
+    };
+
+    if (productId) {
+      fetchProduct();
+    }
+  }, [productId]);
+
   // Tambahkan item ke cart ketika ada data baru dari location.state
   useEffect(() => {
-    if (productId && stock && price) {
+    if (productId && stock && price && name) {
       const newCartItems = [
         ...cartItems,
-        { productId, stock, price, total: stock * price },
+        { productId, stock, price, total: stock * price, name },
       ];
       setCartItems(newCartItems);
     }
-  }, [productId, stock, price]);
+  }, [productId, stock, price, name]);
 
   // Sinkronkan cartItems ke sessionStorage setiap kali berubah
   useEffect(() => {
@@ -34,6 +57,61 @@ const Cart = () => {
   const removeItem = (index) => {
     const updatedCart = cartItems.filter((_, i) => i !== index);
     setCartItems(updatedCart);
+  };
+
+  const handleIncrease = (index) => {
+    // Ambil item yang sesuai berdasarkan index
+    const selectedItem = cartItems[index];
+
+    // Validasi: Pastikan stok tidak melebihi stok produk yang tersedia
+    if (selectedItem.stock < product.stock) {
+      // Perbarui cartItems dengan stok yang ditingkatkan
+      const updatedCart = cartItems.map((item, i) =>
+        i === index
+          ? {
+              ...item,
+              stock: item.stock + 1,
+              total: (item.stock + 1) * item.price,
+            }
+          : item
+      );
+
+      setCartItems(updatedCart);
+
+      // Opsional: Update currentStock hanya untuk produk ini
+      setCurrentStock((prevStock) => prevStock + 1);
+    } else {
+      console.warn("Stock limit reached!");
+    }
+  };
+
+  const handleDecrease = (index) => {
+    const updatedCart = cartItems.map((item, i) =>
+      i === index && item.stock > 1
+        ? {
+            ...item,
+            stock: item.stock - 1,
+            total: (item.stock - 1) * item.price,
+          }
+        : item
+    );
+    setCartItems(updatedCart);
+  };
+
+  const handlepayment = () => {
+    if (cartItems.length === 0) {
+      toast.error("Your cart is empty!");
+      return;
+    }
+
+    const totalAmount = cartItems.reduce((sum, item) => sum + item.total, 0);
+    navigate("/payment", {
+      state: {
+        payable_type: "App\\Models\\Products",
+        payable_id: productId,
+        amount: totalAmount,
+      },
+    });
   };
 
   return (
@@ -56,12 +134,36 @@ const Cart = () => {
                 <tbody>
                   {cartItems.map((item, index) => (
                     <tr key={index}>
-                      <td>Product {item.productId}</td>
-                      <td>${item.price}</td>
-                      <td>{item.stock}</td>
+                      <td>{item.name}</td>
+                      <td>Rp{item.price}</td>
                       <td>
-                        ${item.total}
-                        <button onClick={() => removeItem(index)} style={{backgroundColor:"transparent",border:"none"}}>
+                        <div className="stock">
+                          <button
+                            style={{ marginLeft: "10px" }}
+                            className="stockbutton"
+                            onClick={() => handleDecrease(index)}
+                          >
+                            -
+                          </button>
+                          <p style={{ marginTop: "6px" }}>{item.stock}</p>
+                          <button
+                            className="stockbutton"
+                            style={{ marginLeft: "10px" }}
+                            onClick={() => handleIncrease(index)}
+                          >
+                            <strong>+</strong>
+                          </button>
+                        </div>
+                      </td>
+                      <td>
+                        Rp{item.total.toFixed(2)}
+                        <button
+                          onClick={() => removeItem(index)}
+                          style={{
+                            backgroundColor: "transparent",
+                            border: "none",
+                          }}
+                        >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             id="Layer_1"
@@ -80,49 +182,48 @@ const Cart = () => {
                 </tbody>
               </table>
             </div>
-
-            <div className="summary">
-              <p style={{ color: "#D7843E" }}>
-                <strong>Order Summary</strong>
-              </p>
-              <hr
-                style={{
-                  backgroundColor: "#6D6D6D",
-                  height: "2px",
-                  width: "100%",
-                }}
-              />
-              <p>
-                Sub Total: $
-                {cartItems.reduce((sum, item) => sum + item.total, 0)}
-              </p>
-              <p style={{ color: "#D7843E" }}>Add subscriber coupon</p>
-              <hr
-                style={{
-                  backgroundColor: "#6D6D6D",
-                  height: "2px",
-                  width: "100%",
-                }}
-              />
-              <p>
-                <strong>
-                  <span style={{ color: "#D7843E" }}>Total: </span>
-                  <span style={{ color: "#000" }}>
-                    Rp{cartItems.reduce((sum, item) => sum + item.total, 0)}
-                  </span>
-                </strong>
-              </p>
+            <div>
+              <div className="summary">
+                <p style={{ color: "#D7843E" }}>
+                  <strong>Order Summary</strong>
+                </p>
+                <hr
+                  style={{
+                    backgroundColor: "#6D6D6D",
+                    height: "2px",
+                    width: "100%",
+                  }}
+                />
+                <p>
+                  Sub Total: Rp
+                  {cartItems.reduce((sum, item) => sum + item.total, 0)}
+                </p>
+                <p style={{ color: "#D7843E" }}>Add subscriber coupon</p>
+                <hr
+                  style={{
+                    backgroundColor: "#6D6D6D",
+                    height: "2px",
+                    width: "100%",
+                  }}
+                />
+                <p>
+                  <strong>
+                    <span style={{ color: "#D7843E" }}>Total: </span>
+                    <span style={{ color: "#000" }}>
+                      Rp{cartItems.reduce((sum, item) => sum + item.total, 0)}
+                    </span>
+                  </strong>
+                </p>
+              </div>
+              <div>
+                <button className="checkout" onClick={handlepayment}>
+                  CHECK OUT
+                </button>
+              </div>
             </div>
           </div>
         ) : (
           <p>No product added to the cart.</p>
-        )}
-
-        {/* Checkout Button */}
-        {cartItems.length > 0 && (
-          <div>
-            <button>CHECK OUT</button>
-          </div>
         )}
       </div>
     </div>

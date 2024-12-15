@@ -1,21 +1,58 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
-import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import {
+  Elements,
+  CardElement,
+  useStripe,
+  useElements,
+} from "@stripe/react-stripe-js";
 import axios from "axios";
+import { useLocation, useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 // Load Stripe.js
-const stripePromise = loadStripe(`${process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY}`);
+const stripePromise = loadStripe(
+  `${process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY}`
+);
 
 const StripePayment = () => {
   const [formData, setFormData] = useState({
     name: "",
   });
-
+  const [user, setUser] = useState(null);
+  const [error, setError] = useState(null); // State untuk menangani error
+  const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-
   const stripe = useStripe();
   const elements = useElements();
+  const location = useLocation();
+  const [payment, setPayment] = useState([]);
+
+  const { payable_type, payable_id, amount } = location.state || {};
+
+  useEffect(() => {
+    if (payable_type && payable_id && amount) {
+      setPayment([{ payable_type, payable_id, amount }]);
+    }
+  }, [payable_type, payable_id, amount]);
+  useEffect(() => {
+    const token = localStorage.getItem("token"); // Mengambil token dari localStorage
+
+    if (token) {
+      try {
+        const decoded = jwtDecode(token); // Mendekode token
+        setUser(decoded); // Menyimpan hasil dekode ke state user
+      } catch (error) {
+        console.error("Error decoding token", error);
+        setError("Invalid token format or missing parts."); // Menangani error
+        navigate("/login"); // Navigasi ke login jika token tidak valid
+      }
+    } else {
+      console.log("No token found");
+      navigate("/login"); // Navigasi ke login jika tidak ada token
+    }
+  }, [navigate]);
 
   const handleChange = (e) => {
     setFormData({
@@ -49,12 +86,22 @@ const StripePayment = () => {
       setErrorMessage(error.message);
     } else {
       try {
-        // Mengirim token kartu ke backend
+        const formData = new FormData();
+        formData.append("payable_type", payable_type);
+        formData.append("payable_id", payable_id);
+        formData.append("user_id", user.user_id);
+        formData.append("amount", amount);
+        formData.append("payment_method", "Credit Card");
+        formData.append("name", formData.name); // Pastikan field "name" diisi
+        formData.append("stripeToken", token.id); // Sertakan token Stripe
+
         const response = await axios.post(
           `${process.env.REACT_APP_API_URL}/stripe`,
+          formData, // Kirim langsung `formData`
           {
-            name: formData.name,
-            stripeToken: token.id,
+            headers: {
+              "Content-Type": "multipart/form-data", // Tambahkan header ini
+            },
           }
         );
 
@@ -69,10 +116,15 @@ const StripePayment = () => {
       }
     }
   };
+  if (!payable_type || !payable_id || !amount) {
+    return <p>Error: Missing payment details.</p>;
+  }
 
   return (
-    <div className="container">
-      <h1>Stripe Payment Gateway Integration</h1>
+    <div id="payment" className="container">
+      <h2>
+        <span>SR</span> <span>barbrshop</span>
+      </h2>
 
       <div className="row">
         <div className="col-md-6 col-md-offset-3">
@@ -115,9 +167,15 @@ const StripePayment = () => {
 
                 <div className="row">
                   <div className="col-xs-12">
-                    <button className="btn btn-primary btn-lg btn-block" type="submit" disabled={!stripe}>
-                      Pay Now ($100)
-                    </button>
+                    {payment.map((payment) => (
+                      <button
+                        className="btn btn-primary btn-lg btn-block"
+                        type="submit"
+                        disabled={!stripe}
+                      >
+                        Pay {payment.amount}
+                      </button>
+                    ))}
                   </div>
                 </div>
               </form>

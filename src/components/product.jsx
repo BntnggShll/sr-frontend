@@ -43,10 +43,10 @@ export const Product = () => {
     }
   };
 
-  const handleBuyNow = (productId, stock, price) => {
+  const handleBuyNow = (productId, stock, price,name) => {
     // Arahkan ke halaman cart dengan mengirimkan data product_id, stock, dan price
     navigate("/cart", {
-      state: { productId, stock, price },
+      state: { productId, stock, price ,name},
     });
   };
 
@@ -71,7 +71,7 @@ export const Product = () => {
                     />
                   </Link>
                   <a href="" onClick={() =>
-                      handleBuyNow(product.product_id, 1, product.price)
+                      handleBuyNow(product.product_id, 1, product.price ,product.name)
                     }><button className="btn">Buy Now!</button></a>
                 </div>
               </div>
