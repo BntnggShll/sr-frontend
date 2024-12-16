@@ -32,7 +32,7 @@ export const Reservation = () => {
 
           // Memfilter sesuai dengan user.name
           const filteredReservations = reservations.filter(
-            (reservation) => reservation.user.name === user.name
+            (reservation) => reservation.user.name === user.name && reservation.reservation_status !== "Completed"
           );
 
           setReservations(filteredReservations);

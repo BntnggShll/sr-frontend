@@ -19,7 +19,7 @@ export const Header = (props) => {
                 </h1>
                 <a
                   href="/booking"
-                  className="btn btn-custom btn-lg page-scroll" style={{paddingRight:30,paddingLeft:30}}
+                  className="btn btn-custom btn-lg page-scroll" style={{paddingRight:30,paddingLeft:30,backgroundColor:"#d7843e"}}
                 >
                   Book
                 </a>
