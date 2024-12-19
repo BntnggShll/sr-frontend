@@ -33,13 +33,8 @@ export const Rating = () => {
         setUser(decoded);
       } catch (error) {
         console.error("Error decoding token", error);
-        setError("Invalid token format.");
-        navigate("/login");
       }
-    } else {
-      console.log("No token found");
-      navigate("/login");
-    }
+    } 
   }, [navigate]);
   useEffect(() => {
     const fetchReservations = async () => {

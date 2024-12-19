@@ -1,6 +1,29 @@
-import React from "react";
+import { jwtDecode } from "jwt-decode";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const Navigation = (props) => {
+  const [user, setUser] = useState(null); // Menggunakan null sebagai nilai awal
+  const [error, setError] = useState(null); // State untuk menangani error
+  const navigate = useNavigate(); // Inisialisasi navigate
+
+  useEffect(() => {
+    const token = localStorage.getItem("token"); // Mengambil token dari localStorage
+
+    if (token) {
+      try {
+        const decoded = jwtDecode(token); // Mendekode token
+        setUser(decoded); // Menyimpan hasil dekode ke state user
+      } catch (error) {
+        console.error("Error decoding token", error);
+      }
+    }
+  }, [navigate]); // Tambahkan navigate ke dependency array
+
+  if (error) {
+    return <div>{error}</div>; // Menampilkan pesan error jika ada
+  }
+
   return (
     <nav id="menu" className="navbar navbar-default navbar-fixed-top">
       <div className="container">
@@ -70,14 +93,15 @@ export const Navigation = (props) => {
           </ul>
           <ul className="nav navbar-nav ms-autonavbar-nav me-auto mb-2 mb-lg-0">
             <li class="dropdown">
-              <a href="/profile" class="dropbtn">
-                Profile
-              </a>
-              <div class="dropdown-content">
-                <a href="/login">login</a>
-                <a href="#">Link 2</a>
-                <a href="#">Link 3</a>
-              </div>
+              {user ? (
+                <a href="/profile" className="dropbtn">
+                  {"Profile"}
+                </a>
+              ) : (
+                <a href="/login" className="dropbtn">
+                  Login
+                </a>
+              )}
             </li>
           </ul>
         </div>

@@ -49,7 +49,7 @@ export const Reservation = () => {
   }
 
   if (!user) {
-    return <div>Loading...</div>;
+    return <div></div>;
   }
 
   return (

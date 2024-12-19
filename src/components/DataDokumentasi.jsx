@@ -177,7 +177,7 @@ const DataDocumentation = () => {
               <tr key={documentation.documentation_id}>
                 <td>{documentation.worker.name}</td>
                 <td>{documentation.reservation_id}</td>
-                <td>{documentation.description}</td>
+                <td style={{wordBreak:"break-word"}}>{documentation.description}</td>
                 <td>
                   <img
                     src={documentation.photo_url}

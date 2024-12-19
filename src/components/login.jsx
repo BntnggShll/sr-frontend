@@ -1,26 +1,41 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { ToastContainer, toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
-import 'react-toastify/dist/ReactToastify.css'; // Pastikan Anda mengimpor stylesheet
+import { ToastContainer, toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css"; // Pastikan Anda mengimpor stylesheet
+import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  const [error, setError] = useState(null);
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/login`, { email, password });
-  
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/login`,
+        { email, password }
+      );
+
       // Menyimpan token dan menampilkan notifikasi sukses
-      localStorage.setItem('token', response.data.token);
+      localStorage.setItem("token", response.data.token);
       toast.success("Login Success", {
         position: "top-center",
-        autoClose: 300,
+        autoClose: 3000,
         onClose: () => {
-          navigate('/'); // Navigasi setelah toast ditutup
-        }
+          console.log(user.role);
+          if (user.role === "Admin") {
+            navigate("/admin");
+          }
+          if (user.role === "Pekerja") {
+            navigate("/pekerja");
+          }
+          if (user.role === "User") {
+            navigate("/");
+          }
+        },
       });
     } catch (error) {
       toast.error("Login failed. Please check your email and password.", {
@@ -32,11 +47,28 @@ const Login = () => {
         draggable: true,
         progress: undefined,
       });
-  
+
       console.error("Login failed", error);
     }
   };
-  
+
+  useEffect(() => {
+    const token = localStorage.getItem("token"); // Mengambil token dari localStorage
+
+    if (token) {
+      try {
+        const decoded = jwtDecode(token); // Mendekode token
+        setUser(decoded); // Menyimpan hasil dekode ke state user
+      } catch (error) {
+        console.error("Error decoding token", error);
+        setError("Invalid token format or missing parts."); // Menangani error
+        navigate("/login"); // Navigasi ke login jika token tidak valid
+      }
+    } else {
+      console.log("No token found");
+      navigate("/login"); // Navigasi ke login jika tidak ada token
+    }
+  }, [navigate]);
 
   return (
     <div id="login">
@@ -47,7 +79,9 @@ const Login = () => {
         <div className="form-section-login">
           <h1 className="login-title">Login</h1>
 
-          <label htmlFor="email" className="input-label-login">Your Email</label>
+          <label htmlFor="email" className="input-label-login">
+            Your Email
+          </label>
           <input
             type="email"
             id="email"
@@ -57,7 +91,9 @@ const Login = () => {
             required // Menandai field ini sebagai required
           />
 
-          <label htmlFor="password" className="input-label-login">Password</label>
+          <label htmlFor="password" className="input-label-login">
+            Password
+          </label>
           <input
             type="password"
             id="password"
@@ -66,7 +102,9 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
             required // Menandai field ini sebagai required
           />
-          <a href="#" className="forgot-password">Forgot Password</a>
+          <a href="#" className="forgot-password">
+            Forgot Password
+          </a>
 
           <button className="login-btn" onClick={handleLogin}>
             Login
@@ -78,7 +116,7 @@ const Login = () => {
           {/* <a href="http://127.0.0.1:8000/api/auth/google" className="btn btn-primary">aa</a> */}
         </div>
       </div>
-      <ToastContainer /> 
+      <ToastContainer />
     </div>
   );
 };

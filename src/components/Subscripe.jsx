@@ -18,12 +18,7 @@ const Subscripe = () => {
         setUser(decoded); // Menyimpan hasil dekode ke state user
       } catch (error) {
         console.error("Error decoding token", error);
-        setError("Invalid token format or missing parts."); // Menangani error
-        navigate("/login"); // Navigasi ke login jika token tidak valid
       }
-    } else {
-      console.log("No token found");
-      navigate("/login"); // Navigasi ke login jika tidak ada token
     }
   }, [navigate]);
 
