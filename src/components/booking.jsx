@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
 const BookingList = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null); // Menggunakan null sebagai nilai awal
@@ -110,17 +109,23 @@ const BookingList = () => {
   const handleKonfirmasi = (schedule_id) => {
     setSelectedkonfirmasi(schedule_id);
   };
-  const handleBooking = () => {
+  const handleBooking = (price) => {
     const reservation = {
       service_id: selectedServiceId,
       worker_id: selectedWorkerId,
       schedule_id: selectedkonfirmasi,
       user_id: user.user_id,
-    };  
+    };
     axios
       .post(`${process.env.REACT_APP_API_URL}/reservations`, reservation)
       .then((response) => {
-        alert('sucses');
+        navigate("/payment", {
+          state: {
+            payable_type: "App\\Models\\Services",
+            payable_id: selectedServiceId,
+            amount: price,
+          },
+        });
         setSelectedServiceId(null);
         setSelectedWorkerId(null);
         setSelectedkonfirmasi(null);
@@ -286,31 +291,38 @@ const BookingList = () => {
           <h2>
             <span>PILIH</span>
             <span>JADWAL</span>
-          </h2> 
+          </h2>
           <button onClick={backToWorkers}>Back to Workers</button>
           <div className="calender">
-            <Calendar 
-            minDate={new Date()}
-            onClickDay={handleDateClick} />
-            {selectedSchedule ? (
-              <div>
-                {selectedSchedule.length > 0 ? (
-                  selectedSchedule.map((jadwal) => (
-                    <p key={jadwal.schedule_id}>
-                      <button
-                        onClick={() => handleKonfirmasi(jadwal.schedule_id)}
-                      >
-                        Start Time: {jadwal.available_time_start}
-                      </button>
-                    </p>
-                  ))
-                ) : (
-                  <p>Tidak ada jadwal yang tersedia untuk tanggal ini.</p>
-                )}
-              </div>
-            ) : (
-              <p>Jadwal belum tersedia.</p>
-            )}
+            <Calendar minDate={new Date()} onClickDay={handleDateClick} />
+            <div className="selectcalender">
+              {selectedSchedule ? (
+                <div>
+                  {selectedSchedule.length > 0 ? (
+                    selectedSchedule.slice(0 > 10).map((jadwal) => (
+                      <div key={jadwal.schedule_id}>
+                        <button
+                          onClick={() => handleKonfirmasi(jadwal.schedule_id)}
+                          style={{
+                            marginTop: "-10px",
+                            marginBottom: "10px",
+                            border: "none",
+                            backgroundColor: "#d7843e",
+                            color: "#fff",
+                          }}
+                        >
+                          Start Time: {jadwal.available_time_start}
+                        </button>
+                      </div>
+                    ))
+                  ) : (
+                    <p>Tidak ada jadwal yang tersedia untuk tanggal ini.</p>
+                  )}
+                </div>
+              ) : (
+                <p>Jadwal belum tersedia.</p>
+              )}
+            </div>
           </div>
         </div>
       )}
@@ -365,7 +377,7 @@ const BookingList = () => {
                               {service ? service.description : "No Description"}
                             </td>
                             <td>
-                              Rp{service ? service.price : "Unknown Duration"}
+                              Rp{service ? service.price : "Unknown Price"}
                             </td>
                           </tr>
                         );
@@ -373,9 +385,20 @@ const BookingList = () => {
                 </tbody>
               </table>
             </div>
-            <button className="konfirmasi" onClick={() => handleBooking()}>
-              Confirm Booking
-            </button>
+            {services && (
+              <button
+                className="konfirmasi"
+                onClick={() => {
+                  const service = services.find(
+                    (s) => s.service_id === selectedServiceId
+                  );
+                  const price = service ? service.price : 0; // Default price jika service tidak ditemukan
+                  handleBooking(price);
+                }}
+              >
+                Confirm Booking
+              </button>
+            )}
           </div>
         </div>
       )}

@@ -99,7 +99,7 @@ const Subscripe = () => {
               </svg>
             </span>
             <span>
-              <input type="email" placeholder="your email address" />
+              <input type="email" placeholder="your email address" required/>
             </span>
           </div>
           <button onClick={handleSubscribe}>subscribed</button>

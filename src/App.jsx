@@ -47,6 +47,7 @@ const App = () => {
         <Route path="/payment" element={<DanaPaymentPage/>}/>
         <Route path="/product/:productId" element={<Detailproduk/>}/>
         <Route path="/cart" element={<Cart/>}/>
+        <Route path="/r" element={<Gallery/>}/>
 
 
 

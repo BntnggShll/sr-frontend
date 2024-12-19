@@ -364,17 +364,68 @@ header .intro-text {
 }
 /* galery Section */
 #galery {
-  padding: 100px 0;
+  background-color: #0b161a;
+  height: 100vh;
+  width: 100vw;
 }
-.galery-item {
-  margin: 1px -15px 0 -14px;
-  padding: 0;
+#galery img {
+  height: 300px;
+  width: 300px;
+  margin-left: 15px;
+  margin-right: 15px;
+  border: 2px #d7843e solid;
 }
-.galery-item .hover-bg {
-  overflow: hidden;
+#galery h2 {
+  color: #d7843e;
+  font-family: "jaini", sans-serif;
+  font-size: 90px;
+  font-weight: 400;
+}
+#galery button {
+  background: transparent;
+  border: none;
+}
+#galery button:disabled {
+  background: transparent;
+  border: none;
+  cursor: not-allowed; /* Opsional: menunjukkan bahwa tombol nonaktif */
+  opacity: 0.5;
+}
+.worker {
+  width: 91%;
+  height: 30px;
+  background-color: #d9d9d9;
+  margin-left: 15px;
+  padding-top: 3px;
+  border-radius: 3px;
+  color: #d7843e;
+}
+.description {
+  margin-top: 10px;
+  width: 300px;
+  min-height: 30px;
+  background-color: #d9d9d9;
+  margin-left: 15px;
+  padding-top: 3px;
+  border-radius: 3px;
+  color: #d7843e;
+  word-wrap: break-word;
+}
+.imagegalery {
+  flex-shrink: 0;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+.gallery-container {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  will-change: transform;
   position: relative;
-  margin: 0;
+  overflow: hidden;
+  width: 90%;
 }
+
 .hover-bg .hover-text {
   position: absolute;
   text-align: center;
@@ -416,14 +467,14 @@ header .intro-text {
 #rating {
   /* position:fixed; */
   height: 100vh; /* Tinggi penuh layar */
-  width: 100vW;
+  width: 100vw;
   background-color: #0b161a; /* Warna latar opsional */
   overflow: hidden;
 }
 
 .title {
   display: flex;
-  width: 100%; 
+  width: 100%;
   box-sizing: border-box;
 }
 
@@ -438,15 +489,15 @@ header .intro-text {
   color: #fff;
   font-size: 40px;
 }
-#rating .right{
+#rating .right {
   margin-left: 35%;
   padding-top: 60px;
 }
-#rating .left{
+#rating .left {
   padding-top: 60px;
   padding-left: 30px;
 }
-#rating .reting{
+#rating .reting {
   position: absolute;
   height: 75%;
   width: 50%;
@@ -454,12 +505,12 @@ header .intro-text {
   background-color: #d9d9d9;
   padding: 20px;
 }
-.feedback-container{
+.feedback-container {
   height: 490px;
-  overflow-y:scroll;
+  overflow-y: scroll;
   overflow-x: hidden;
 }
-#rating .feedback{
+#rating .feedback {
   display: flex;
   max-height: 500px;
   width: 600px;
@@ -467,8 +518,6 @@ header .intro-text {
   background-color: #d9d9d9;
   margin-bottom: 30px;
   padding: 20px;
-  
-  
 }
 
 .table tbody {
@@ -484,7 +533,6 @@ header .intro-text {
   table-layout: fixed; /* Pastikan kolom tetap sejajar */
 }
 
-
 *::-webkit-scrollbar {
   display: none; /* Hapus scrollbar di browser berbasis WebKit (Chrome, Safari, Edge) */
 }
@@ -497,21 +545,25 @@ header .intro-text {
   color: gold; /* Warna bintang penuh */
 }
 .star.half {
-  color: linear-gradient(to right, gold 50%, lightgray 50%); /* Bintang setengah penuh */
+  color: linear-gradient(
+    to right,
+    gold 50%,
+    lightgray 50%
+  ); /* Bintang setengah penuh */
   -webkit-background-clip: text;
 }
-.stars{
+.stars {
   display: flex;
   align-items: center;
 }
-.stars h2{
+.stars h2 {
   margin-right: 10px;
   color: #000000;
 }
-.stars p{
+.stars p {
   margin-right: 15px;
   color: #000;
-  font-weight:600;
+  font-weight: 600;
 }
 .rating-distribution {
   margin-top: 20px;
@@ -541,7 +593,7 @@ header .intro-text {
   color: #777;
 }
 
-.input{
+.input {
   width: 100%;
   height: 70px;
   border: none;
@@ -550,7 +602,7 @@ header .intro-text {
   resize: none;
   color: #000000;
 }
-.reviewinput{
+.reviewinput {
   margin-top: 20px;
   width: 20%;
   height: 35px;
@@ -559,14 +611,14 @@ header .intro-text {
   color: #fff;
   background: #d7843e;
 }
-.dropdown{
+.dropdown {
   background: transparent;
   border: none;
   padding-left: auto;
 }
 /* Team Section */
 /* Team Section */
-#team  {
+#team {
   padding: 100px 0;
   background: #0b161a;
   color: #fff;
@@ -624,7 +676,7 @@ h2 span:last-child {
   bottom: 50px;
   left: 0px;
 }
-#team .tombol{
+#team .tombol {
   background: transparent;
   border: none;
 }
@@ -1163,7 +1215,7 @@ h2 span:last-child {
   padding-left: 100px;
   color: #000;
 }
-.konfirmasi{
+.konfirmasi {
   border: solid 2px #d7843e;
   border-radius: 20px;
   color: #0b161a;
@@ -1176,25 +1228,22 @@ h2 span:last-child {
   background: url("../img/reservation.jpg") no-repeat;
   background-color: #0b161a;
   background-size: 100% 100%;
-  background-position:center;
-  background-position-y:-150px;
-
-
+  background-position: center;
+  background-position-y: -150px;
 }
-#reservation h2{
+#reservation h2 {
   color: #d7843e;
   font-family: "Jaini", sans-serif;
   margin-left: 40px;
   padding-top: 90px;
   font-size: 60px;
-  
 }
-#reservation .container{
- width: 70%;
- border: 2px solid #d7843e; 
- color: #d7843e;
- background-color: #0b161a;
- margin: 100px auto;
+#reservation .container {
+  width: 70%;
+  border: 2px solid #d7843e;
+  color: #d7843e;
+  background-color: #0b161a;
+  margin: 100px auto;
 }
 /* Container dengan scroll */
 .reservations-scrollable {
@@ -1213,10 +1262,8 @@ h2 span:last-child {
   padding: 10px;
   border: 1px solid #ddd; /* Opsional: Tambahkan border pada setiap item */
   border-radius: 5px; /* Opsional: Buat sudut melengkung */
-  background-color: #D9D9D9;
+  background-color: #d9d9d9;
 }
-
-
 
 .modal {
   display: block; /* Jangan lupa memastikan display diatur */
@@ -1318,18 +1365,28 @@ h2 span:last-child {
   gap: 10px;
   width: 80%;
 }
-#jadwal {height: 100%;
+#jadwal {
+  height: 100%;
   background-color: #0b161a;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
-
 
 .calender {
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 20px 0;
+}
+.selectcalender {
+  display: flex;
+  overflow-y: auto;
+  max-height: 160px;
+  margin-top: 50px;
+  margin-left: 30px;
+  background-color: #d9d9d9;
+  padding: 15px;
+  border-radius: 5px;
 }
 
 .react-calendar {
@@ -1341,7 +1398,7 @@ h2 span:last-child {
 }
 
 .react-calendar__month-view__days__day:nth-child(7n) {
-  color: white; 
+  color: white;
   background-color: red;
 }
 
@@ -1360,12 +1417,12 @@ h2 span:last-child {
   cursor: not-allowed !important;
 }
 /* keuangan */
-#keuangan{
-background: #0b161a;
-max-height:1000vh ;
-padding: 35px;
+#keuangan {
+  background: #0b161a;
+  max-height: 1000vh;
+  padding: 35px;
 }
-#keuangan h2{
+#keuangan h2 {
   font-family: "Jaini", sans-serif;
   color: #d7843e;
 }
@@ -1385,20 +1442,19 @@ padding: 35px;
   object-fit: none;
 }
 
-
 @media (max-width: 768px) {
   #about img {
     margin: 50px 0;
   }
 }
 
-#cart{
+#cart {
   background-color: #0b161a;
   display: "flex";
-  justify-Content: "center";
-  height:100vh;
+  justify-content: "center";
+  height: 100vh;
 }
-#cart h2{
+#cart h2 {
   font-family: "Jaini", sans-serif;
   display: flex;
   justify-content: center;
@@ -1406,27 +1462,25 @@ padding: 35px;
   color: #d7843e;
 }
 
-#tablecart{
+#tablecart {
   width: 70%;
   padding: 0px 30px 10px 70px;
 }
-#tablecart th{
+#tablecart th {
   color: #d7843e;
 }
-#tablecart tbody{
+#tablecart tbody {
   max-height: 50%;
-  
 }
 
-
-.summary{
+.summary {
   padding: 20px;
-  background-color: #D9D9D9;
+  background-color: #d9d9d9;
   height: 250px;
   width: 350px;
 }
 
-.x{
+.x {
   height: 20px;
   width: 20px;
   fill: #d7843e;
@@ -1435,7 +1489,7 @@ padding: 35px;
   align-items: center;
 }
 
-.checkout{
+.checkout {
   margin-top: 10px;
   border: none;
   width: 100%;
@@ -1444,27 +1498,26 @@ padding: 35px;
   color: #fff;
 }
 
-.stock{
-  background-color:#d7843e;
+.stock {
+  background-color: #d7843e;
   width: 90px;
   border-radius: 20px;
   color: #fff;
   display: flex;
   margin-top: -4px;
-
 }
-.stockbutton{
+.stockbutton {
   border: none;
   background-color: transparent;
   margin-right: 10px;
 }
-#payment{
+#payment {
   background-color: #0b161a;
   width: 100vw;
   height: 100vh;
   color: #d7843e;
 }
-#payment h2{
+#payment h2 {
   text-align: center;
 }
 
@@ -1472,54 +1525,53 @@ padding: 35px;
   background-color: #0b161a;
   height: 100vh;
   width: 100vw;
-  display: flex; 
+  display: flex;
   justify-content: center;
-  align-items: center; 
+  align-items: center;
 }
 
 #subscripe .container {
-  background-color: #202B2D;
+  background-color: #202b2d;
   display: flex;
   height: 70%;
   width: 70%;
   justify-content: center;
-  border-radius:40px ;
+  border-radius: 40px;
   padding: 80px;
 }
 
 #subscripe h2 {
-  font-family: 'jaini',sans-serif;
+  font-family: "jaini", sans-serif;
   color: #d7843e;
   font-size: 60px;
   font-weight: 100;
 }
 
-#subscripe p{
+#subscripe p {
   color: #fff;
 }
 
-.email{
-  fill: #FFF;
+.email {
+  fill: #fff;
   background-color: #d7843e;
   width: 50px;
   height: 25px;
   margin-bottom: -6.6px;
 }
-#subscripe input{
+#subscripe input {
   height: 25px;
-  width:50%;
+  width: 50%;
   border: none;
-  margin-bottom:20px ;
+  margin-bottom: 20px;
   margin-top: 15px;
 }
-#subscripe input::placeholder{
+#subscripe input::placeholder {
   color: #d7843e;
 }
-#subscripe button{
-background-color: #d7843e;
-border: none;
-color: #fff;
-height: 15%;
-width: 30%;
+#subscripe button {
+  background-color: #d7843e;
+  border: none;
+  color: #fff;
+  height: 15%;
+  width: 30%;
 }
-
