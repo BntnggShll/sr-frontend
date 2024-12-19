@@ -305,7 +305,7 @@ const BookingList = () => {
                           onClick={() => handleKonfirmasi(jadwal.schedule_id)}
                           style={{
                             marginTop: "-10px",
-                            marginBottom: "10px",
+                            marginBottom: "15px",
                             border: "none",
                             backgroundColor: "#d7843e",
                             color: "#fff",

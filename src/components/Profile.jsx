@@ -33,7 +33,6 @@ const Profile = () => {
     // Menampilkan loading atau message jika data belum tersedia
     return <div>Loading...</div>;
   }
-console.log(user);
   return (
     <div id='profile'>
       <div className='image-container'>

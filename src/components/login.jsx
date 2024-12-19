@@ -2,16 +2,15 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import "react-toastify/dist/ReactToastify.css"; // Pastikan Anda mengimpor stylesheet
-import { jwtDecode } from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
-  const [error, setError] = useState(null);
 
+  // Fungsi untuk login
   const handleLogin = async () => {
     try {
       const response = await axios.post(
@@ -19,54 +18,60 @@ const Login = () => {
         { email, password }
       );
 
-      // Menyimpan token dan menampilkan notifikasi sukses
-      localStorage.setItem("token", response.data.token);
-      toast.success("Login Success", {
+      // Simpan token di localStorage
+      const token = response.data.token;
+      localStorage.setItem("token", token);
+
+      // Decode token dan ambil role
+      const decoded = jwtDecode(token);
+      const role = decoded.role;
+
+      // Tampilkan notifikasi sukses
+      toast.success("Login successful", {
         position: "top-center",
         autoClose: 3000,
         onClose: () => {
-          console.log(user.role);
-          if (user.role === "Admin") {
+          if (role === "Admin") {
             navigate("/admin");
-          }
-          if (user.role === "Pekerja") {
+          } else if (role === "Pekerja") {
             navigate("/pekerja");
-          }
-          if (user.role === "User") {
+          } else {
             navigate("/");
           }
         },
       });
     } catch (error) {
+      // Tampilkan notifikasi error
       toast.error("Login failed. Please check your email and password.", {
         position: "top-center",
         autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
       });
 
       console.error("Login failed", error);
     }
   };
 
+  // Periksa token di localStorage
   useEffect(() => {
-    const token = localStorage.getItem("token"); // Mengambil token dari localStorage
-
+    const token = localStorage.getItem("token");
     if (token) {
       try {
-        const decoded = jwtDecode(token); // Mendekode token
-        setUser(decoded); // Menyimpan hasil dekode ke state user
+        const decoded = jwtDecode(token);
+        const role = decoded.role;
+
+        // Arahkan berdasarkan role
+        if (role === "Admin") {
+          navigate("/admin");
+        } else if (role === "Pekerja") {
+          navigate("/pekerja");
+        } else {
+          navigate("/");
+        }
       } catch (error) {
         console.error("Error decoding token", error);
-        setError("Invalid token format or missing parts."); // Menangani error
-        navigate("/login"); // Navigasi ke login jika token tidak valid
+        localStorage.removeItem("token"); // Hapus token yang tidak valid
+        navigate("/login"); // Arahkan ulang ke login
       }
-    } else {
-      console.log("No token found");
-      navigate("/login"); // Navigasi ke login jika tidak ada token
     }
   }, [navigate]);
 
@@ -88,7 +93,7 @@ const Login = () => {
             className="input-box-login"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required // Menandai field ini sebagai required
+            required
           />
 
           <label htmlFor="password" className="input-label-login">
@@ -100,7 +105,7 @@ const Login = () => {
             className="input-box-login"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required // Menandai field ini sebagai required
+            required
           />
           <a href="#" className="forgot-password">
             Forgot Password
@@ -113,7 +118,6 @@ const Login = () => {
           <div className="register-link">
             Don't have an account? <a href="/register">Register</a>
           </div>
-          {/* <a href="http://127.0.0.1:8000/api/auth/google" className="btn btn-primary">aa</a> */}
         </div>
       </div>
       <ToastContainer />
