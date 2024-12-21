@@ -27,6 +27,7 @@ import DataKeuangan from "./components/DataKeuangan";
 import Detailproduk from "./components/detailproduk";
 import Subscripe from "./components/Subscripe";
 import Cart from "./components/cart";
+import GooglePayPayment from "./components/GooglePayPayment";
 import SmoothScroll from "smooth-scroll";
 import "./App.css";
 
@@ -83,10 +84,10 @@ const App = () => {
           }
         />
         <Route
-          path="/r"
+          path="/googlepay"
           element={
             // <ProtectedRoute allowedRoles={["User"]}>
-              <Gallery />
+              <GooglePayPayment />
             // </ProtectedRoute>
           }
         />

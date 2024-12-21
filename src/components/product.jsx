@@ -43,7 +43,7 @@ export const Product = () => {
     }
   };
 
-  const handleBuyNow = (productId, stock, price,name) => {
+  const handleBuyNow = (productId, stock, price, name) => {
     // Arahkan ke halaman cart dengan mengirimkan data product_id, stock, dan price
     navigate("/cart", {
       state: { productId, stock, price ,name},

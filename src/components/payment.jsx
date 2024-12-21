@@ -9,6 +9,7 @@ import {
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { ToastContainer, toast } from "react-toastify";
 
 // Load Stripe.js
 const stripePromise = loadStripe(
@@ -113,9 +114,13 @@ const StripePayment = () => {
           setErrorMessage(response.data.message || "Payment failed.");
         }
         if (setSuccessMessage) {
-          setTimeout(() => {
-            navigate("/");
-          }, 1000); // Delay selama 2 detik (2000 milidetik)
+          toast.success("Payment successful!", {
+            position: "top-center",
+            autoClose: 2000,
+            onClose: () => {
+                navigate("/");
+            },
+          }); // Delay selama 2 detik (2000 milidetik)
         }
         
       } catch (error) {
@@ -124,7 +129,7 @@ const StripePayment = () => {
     }
   };
   if (!payable_type || !payable_id || !amount) {
-    return <p>Error: Missing payment details.</p>;
+    return <p style={{display:"flex",justifyContent:"center",marginTop:"20%"}}>Error: Missing payment details.</p>;
   }
 
   return (
@@ -190,6 +195,7 @@ const StripePayment = () => {
           </div>
         </div>
       </div>
+      <ToastContainer/>
     </div>
   );
 };

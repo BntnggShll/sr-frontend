@@ -53,7 +53,7 @@ export const Gallery = (props) => {
         <div className="imagegalery"> 
           {galery.length > 0 ? (
             galery.slice(startIndex, startIndex + itemsPerPage).map((galeri) => (
-              <div key={galeri.id}>
+              <div key={galeri.documentation_id}>
                 <p className="worker">{galeri.worker.name}</p>
                 <img src={galeri.photo_url} alt={galeri.worker.name} />
                 <p className="description">{galeri.description}</p>

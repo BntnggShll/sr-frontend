@@ -58,11 +58,14 @@ export const Navigation = (props) => {
                 Home
               </a>
             </li>
-            <li>
-              <a href="#subscripe" className="page-scroll">
-                Subscribe
-              </a>
-            </li>
+            {user && user.subscription_status !== "Aktif" ? (
+              <li>
+                <a href="#subscripe" className="page-scroll">
+                  Subscribe
+                </a>
+              </li>
+            ) : null}
+
             <li>
               <a href="#team" className="page-scroll">
                 Barberman
