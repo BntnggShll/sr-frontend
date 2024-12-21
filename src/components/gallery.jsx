@@ -27,9 +27,16 @@ export const Gallery = (props) => {
   }, []);
   return (
     <div id="galery" className="text-center">
-      <h2>Gallery</h2>
-      <div className="imagegalery">
-        <button onClick={handlePrevious} disabled={startIndex === 0}>
+      <div >
+        <h2>Gallery</h2>
+        
+      </div>
+      <div className="button-wrapper">
+        <button
+          onClick={handlePrevious}
+          disabled={startIndex === 0}
+          className="prev-btn"
+        >
           <svg
             width="100"
             height="100"
@@ -43,23 +50,23 @@ export const Gallery = (props) => {
             />
           </svg>
         </button>
+        <div className="imagegalery"> 
           {galery.length > 0 ? (
-            galery
-              .slice(startIndex, startIndex + itemsPerPage)
-              .map((galeri) => (
-                <div key={galeri.id}>
-                  <p className="worker">{galeri.worker.name}</p>
-                  <img src={galeri.photo_url} alt={galeri.worker.name} />
-                  <p className="description">{galeri.description}</p>
-                </div>
-              ))
+            galery.slice(startIndex, startIndex + itemsPerPage).map((galeri) => (
+              <div key={galeri.id}>
+                <p className="worker">{galeri.worker.name}</p>
+                <img src={galeri.photo_url} alt={galeri.worker.name} />
+                <p className="description">{galeri.description}</p>
+              </div>
+            ))
           ) : (
             <p>Belum ada gambar</p>
           )}
-
+        </div>
         <button
           onClick={handleNext}
           disabled={startIndex + itemsPerPage >= galery.length}
+          className="next-btn"
         >
           <svg
             width="100"

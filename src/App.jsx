@@ -45,49 +45,49 @@ const App = () => {
         <Route
           path="/booking"
           element={
-            <ProtectedRoute allowedRoles={["User"]}>
+            // <ProtectedRoute allowedRoles={["User"]}>
               <Booking />
-            </ProtectedRoute>
+            // </ProtectedRoute>
           }
         />
         <Route
           path="/profile"
           element={
-            <ProtectedRoute allowedRoles={["User"]}>
+            // <ProtectedRoute allowedRoles={["User"]}>
               <Profile />
-            </ProtectedRoute>
+            // </ProtectedRoute>
           }
         />
         <Route
           path="/payment"
           element={
-            <ProtectedRoute allowedRoles={["User"]}>
+            // <ProtectedRoute allowedRoles={["User"]}>
               <DanaPaymentPage />
-            </ProtectedRoute>
+            // </ProtectedRoute>
           }
         />
         <Route
           path="/product/:productId"
           element={
-            <ProtectedRoute allowedRoles={["User"]}>
+            // <ProtectedRoute allowedRoles={["User"]}>
               <Detailproduk />
-            </ProtectedRoute>
+            // </ProtectedRoute>
           }
         />
         <Route
           path="/cart"
           element={
-            <ProtectedRoute allowedRoles={["User"]}>
+            // <ProtectedRoute allowedRoles={["User"]}>
               <Cart />
-            </ProtectedRoute>
+            // </ProtectedRoute>
           }
         />
         <Route
           path="/r"
           element={
-            <ProtectedRoute allowedRoles={["User"]}>
+            // <ProtectedRoute allowedRoles={["User"]}>
               <Gallery />
-            </ProtectedRoute>
+            // </ProtectedRoute>
           }
         />
 
@@ -114,7 +114,7 @@ const App = () => {
         <Route
           path="/admin"
           element={
-            <ProtectedRoute allowedRoles={["Admin"]}>
+            // <ProtectedRoute allowedRoles={["Admin"]}>
               <div>
                 <DataKeuangan />
                 <DataUser />
@@ -124,7 +124,7 @@ const App = () => {
                 <DataLaporan />
                 <DataHapusReview />
               </div>
-            </ProtectedRoute>
+            // </ProtectedRoute>
           }
         />
 
@@ -132,13 +132,13 @@ const App = () => {
         <Route
           path="/pekerja"
           element={
-            <ProtectedRoute allowedRoles={["Pekerja"]}>
+            // <ProtectedRoute allowedRoles={["Pekerja"]}>
               <div>
                 <DataDocumentation />
                 <DataReting />
                 <DataJadwalPekerja />
               </div>
-            </ProtectedRoute>
+            // </ProtectedRoute>
           }
         />
       </Routes>

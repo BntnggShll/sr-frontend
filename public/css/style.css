@@ -385,6 +385,35 @@ header .intro-text {
   background: transparent;
   border: none;
 }
+.button-wrapper {
+  display: flex;
+  justify-content: space-between; /* Mengatur tombol di kedua sisi */
+  align-items: center;
+}
+
+.prev-btn,
+.next-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.prev-btn:disabled,
+.next-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.prev-btn:hover:not(:disabled),
+.next-btn:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
 #galery button:disabled {
   background: transparent;
   border: none;

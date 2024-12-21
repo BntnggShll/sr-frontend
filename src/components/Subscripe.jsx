@@ -6,7 +6,8 @@ import { ToastContainer, toast } from "react-toastify";
 
 const Subscripe = () => {
   const [user, setUser] = useState(null); // Menggunakan null sebagai nilai awal
-  const [error, setError] = useState(null); // State untuk menangani error
+  const [error, setError] = useState(null);
+  const [email, setEmail] =useState(''); // State untuk menangani error
   const navigate = useNavigate(); // Inisialisasi navigate
 
   useEffect(() => {
@@ -22,23 +23,39 @@ const Subscripe = () => {
     }
   }, [navigate]);
 
+  const handleChange =(e)=>{
+  setEmail(e.target.value);
+  };
+
   const handleSubscribe = async (e) => {
     try {
-      const response = await axios.put(
-        `${process.env.REACT_APP_API_URL}/subscribe/${user.user_id}`,
-        { subscription_status: "Aktif" }
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/subscriptions/${user.user_id}`,
+        { 
+          description: email,
+          price:150000,
+          status:"Active"
+         }
       );
 
-      localStorage.setItem("token", response.data.token);
-      navigate("/payment", {
-        state: {
-          payable_type: "App\\Models\\Users",
-          payable_id: user.user_id,
-          amount: 150000,
-        },
-      });
+      if (response.data.token && response.data.subscription?.subscription_id) {
+        const { subscription } = response.data;
+      
+        localStorage.setItem("token", response.data.token);
+        navigate("/payment", {
+          state: {
+            payable_type: "App\\Models\\Subscriptions",
+            payable_id: subscription.subscription_id,
+            amount: 150000,
+          },
+        });
+      } else {
+        console.error("Response data does not have subscription_id.");
+      }
+      
+      
     } catch (error) {
-      toast.error("Login failed. Please check your email and password.", {
+      toast.error("Please check your email", {
         position: "top-center",
         autoClose: 3000,
         hideProgressBar: false,
@@ -48,7 +65,7 @@ const Subscripe = () => {
         progress: undefined,
       });
 
-      console.error("Login failed", error);
+      console.error( error);
     }
   };
 
@@ -94,7 +111,11 @@ const Subscripe = () => {
               </svg>
             </span>
             <span>
-              <input type="email" placeholder="your email address" required/>
+              <input type="email"
+        placeholder="your email address"
+        value={email} // Mengikat nilai input dengan state
+        onChange={handleChange} // Memperbarui state saat input berubah
+        required/>
             </span>
           </div>
           <button onClick={handleSubscribe}>subscribed</button>
