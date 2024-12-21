@@ -24,20 +24,19 @@ const BookingList = () => {
   const itemjadwal = 10;
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token"); // Mengambil token dari sessionStorage
     if (token) {
       try {
         const decoded = jwtDecode(token); // Mendekode token
         setUser(decoded); // Menyimpan hasil dekode ke state user
       } catch (error) {
         console.error("Error decoding token", error);
-        setError("Invalid token format or missing parts."); // Menangani error
-        navigate("/login"); // Navigasi ke login jika token tidak valid
+        setError("Invalid token format or missing parts."); 
       }
     } else {
       console.log("No token found");
-      navigate("/login"); // Navigasi ke login jika tidak ada token
     }
+
     const fetchData = async () => {
       try {
         axios
@@ -80,8 +79,10 @@ const BookingList = () => {
         console.error("Error fetching data", error);
       }
     };
+
     fetchData();
-  }, []);
+  }, []);  
+
 
   const startIndexServices = currentPage * itemsPerPage;
   const endIndexServices = startIndexServices + itemsPerPage;

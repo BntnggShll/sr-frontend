@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 
 function ProtectedRoute({ children, allowedRoles }) {
   // Ambil token dari localStorage
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
 
   if (!token) {
     // Redirect ke login jika token tidak ditemukan

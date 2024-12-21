@@ -8,7 +8,7 @@ export const Navigation = (props) => {
   const navigate = useNavigate(); // Inisialisasi navigate
 
   useEffect(() => {
-    const token = localStorage.getItem("token"); // Mengambil token dari localStorage
+    const token = sessionStorage.getItem("token"); // Mengambil token dari sessionStorage
 
     if (token) {
       try {
@@ -16,6 +16,9 @@ export const Navigation = (props) => {
         setUser(decoded); // Menyimpan hasil dekode ke state user
       } catch (error) {
         console.error("Error decoding token", error);
+        setError("Invalid token format or missing parts."); // Menangani error
+        sessionStorage.removeItem("token"); // Menghapus token yang tidak valid
+        navigate("/login"); // Arahkan ke halaman login jika token tidak valid
       }
     }
   }, [navigate]); // Tambahkan navigate ke dependency array

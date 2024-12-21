@@ -72,7 +72,7 @@ export const Product = () => {
                   </Link>
                   <a href="" onClick={() =>
                       handleBuyNow(product.product_id, 1, product.price ,product.name)
-                    }><button className="btn">Buy Now!</button></a>
+                    }><button className="btn">{product.name}</button></a>
                 </div>
               </div>
             ))}

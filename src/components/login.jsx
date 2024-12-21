@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import {jwtDecode} from "jwt-decode";
+import {jwtDecode} from "jwt-decode"; // Perbaikan typo pada impor jwtDecode
 import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
@@ -18,9 +18,9 @@ const Login = () => {
         { email, password }
       );
 
-      // Simpan token di localStorage
+      // Simpan token di Session Storage
       const token = response.data.token;
-      localStorage.setItem("token", token);
+      sessionStorage.setItem("token", token);
 
       // Decode token dan ambil role
       const decoded = jwtDecode(token);
@@ -51,9 +51,9 @@ const Login = () => {
     }
   };
 
-  // Periksa token di localStorage
+  // Periksa token di Session Storage
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (token) {
       try {
         const decoded = jwtDecode(token);
@@ -69,7 +69,7 @@ const Login = () => {
         }
       } catch (error) {
         console.error("Error decoding token", error);
-        localStorage.removeItem("token"); // Hapus token yang tidak valid
+        sessionStorage.removeItem("token"); // Hapus token yang tidak valid
         navigate("/login"); // Arahkan ulang ke login
       }
     }

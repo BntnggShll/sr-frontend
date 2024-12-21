@@ -11,7 +11,7 @@ const Subscripe = () => {
   const navigate = useNavigate(); // Inisialisasi navigate
 
   useEffect(() => {
-    const token = localStorage.getItem("token"); // Mengambil token dari localStorage
+    const token = sessionStorage.getItem("token"); // Mengambil token dari ss
 
     if (token) {
       try {
@@ -41,7 +41,7 @@ const Subscripe = () => {
       if (response.data.token && response.data.subscription?.subscription_id) {
         const { subscription } = response.data;
       
-        localStorage.setItem("token", response.data.token);
+        sessionStorage.setItem("token", response.data.token);
         navigate("/payment", {
           state: {
             payable_type: "App\\Models\\Subscriptions",

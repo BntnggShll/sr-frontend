@@ -18,7 +18,7 @@ const Register = () => {
         { name, email, password, phone_number }
       );
 
-      localStorage.setItem('token', response.data.token);
+      sessionStorage.setItem('token', response.data.token);
       navigate("/");
     } catch (error) {
       toast.error("Register failed, The email has already been taken.", {

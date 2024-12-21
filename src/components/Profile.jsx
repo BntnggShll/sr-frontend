@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { jwtDecode } from "jwt-decode";
+import {jwtDecode} from "jwt-decode"; // Hilangkan curly braces untuk jwtDecode
 import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
-  const [user, setUser] = useState(null); // Menggunakan null sebagai nilai awal
+  const [user, setUser] = useState(null); // State untuk user
   const [error, setError] = useState(null); // State untuk menangani error
+  const [showModal, setShowModal] = useState(false); // State untuk modal logout
   const navigate = useNavigate(); // Inisialisasi navigate
 
   useEffect(() => {
-    const token = localStorage.getItem('token'); // Mengambil token dari localStorage
+    const token = sessionStorage.getItem('token'); // Mengambil token dari Session Storage
 
     if (token) {
       try {
@@ -25,6 +26,12 @@ const Profile = () => {
     }
   }, [navigate]); // Tambahkan navigate ke dependency array
 
+  // Fungsi untuk logout
+  const handleLogout = () => {
+    sessionStorage.removeItem('token'); // Hapus token dari Session Storage
+    navigate('/login'); // Arahkan ke halaman login
+  };
+
   if (error) {
     return <div>{error}</div>; // Menampilkan pesan error jika ada
   }
@@ -33,6 +40,7 @@ const Profile = () => {
     // Menampilkan loading atau message jika data belum tersedia
     return <div>Loading...</div>;
   }
+
   return (
     <div id='profile'>
       <div className='image-container'>
@@ -44,7 +52,7 @@ const Profile = () => {
       </div>
       <div className='edit'>
         <button className='a'>Edit Profile</button>
-        <button className='b'>Setting</button>
+        <button className='b' onClick={() => setShowModal(true)}>Log Out</button>
       </div>
       <div className='table'> 
         <p className='judul'>Email</p>
@@ -56,6 +64,24 @@ const Profile = () => {
         <p className='judul'>Points</p>
         <p className='isi'>{user.points}</p> {/* Menampilkan poin pengguna dari token */}
       </div>
+
+      {/* Modal Logout */}
+      {showModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <h1>Confirm Logout</h1>
+            <p>Are you sure you want to log out?</p>
+            <div className="modal-actions">
+              <button onClick={handleLogout} className="confirm-button">
+                Yes, Logout
+              </button>
+              <button onClick={() => setShowModal(false)} className="cancel-button">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

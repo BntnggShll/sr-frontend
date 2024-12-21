@@ -37,7 +37,7 @@ const StripePayment = () => {
     }
   }, [payable_type, payable_id, amount]);
   useEffect(() => {
-    const token = localStorage.getItem("token"); // Mengambil token dari localStorage
+    const token = sessionStorage.getItem("token"); // Mengambil token dari sessionStorage
 
     if (token) {
       try {
@@ -52,7 +52,8 @@ const StripePayment = () => {
       console.log("No token found");
       navigate("/login"); // Navigasi ke login jika tidak ada token
     }
-  }, [navigate]);
+  }, [navigate]); // Menambahkan navigate sebagai dependensi
+
 
   const handleChange = (e) => {
     setFormData({

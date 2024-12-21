@@ -30,25 +30,25 @@ const FinancialReports = () => {
     report_date: "",
   });
   useEffect(() => {
-    const token = localStorage.getItem("token"); // Mengambil token dari localStorage
-
+    const token = sessionStorage.getItem("token"); // Mengambil token dari sessionStorage
+  
     if (token) {
       try {
-        const decoded = jwtDecode(token);
+        const decoded = jwtDecode(token); // Mendekode token
         setNewExpense({
           ...newExpense,
-          admin_id: decoded.user_id,
+          admin_id: decoded.user_id, // Mengatur admin_id berdasarkan user_id dari token
         });
       } catch (error) {
         console.error("Error decoding token", error);
         setError("Invalid token format or missing parts."); // Menangani error
-        navigate("/login"); // Navigasi ke login jika token tidak valid
+        sessionStorage.removeItem("token");
       }
     } else {
       console.log("No token found");
-      navigate("/login"); // Navigasi ke login jika tidak ada token
     }
-  }, [navigate]);
+  }, [navigate, newExpense]); // Tambahkan newExpense ke dependency array
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
