@@ -70,7 +70,10 @@ const BookingList = () => {
         axios
           .get(`${process.env.REACT_APP_API_URL}/schedules`)
           .then((response) => {
-            setSchedules(response.data.schedule);
+            const available = response.data.schedule.filter(
+              (e)=> e.status === "Available" 
+            );
+            setSchedules(available);
           })
           .catch((error) => {
             console.error("Error fetching schedules", error);
@@ -120,6 +123,8 @@ const BookingList = () => {
     axios
       .post(`${process.env.REACT_APP_API_URL}/reservations`, reservation)
       .then((response) => {
+        axios.put(`${process.env.REACT_APP_API_URL}/points/${user.user_id}`)
+        axios.put(`${process.env.REACT_APP_API_URL}/booked/${selectedkonfirmasi}`)
         navigate("/payment", {
           state: {
             payable_type: "App\\Models\\Services",

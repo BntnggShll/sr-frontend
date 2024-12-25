@@ -152,7 +152,6 @@ const ProductTable = () => {
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
   };
-
   return (
     <div id="dataproduct">
       <nav>

@@ -135,6 +135,7 @@ const App = () => {
           element={
             // <ProtectedRoute allowedRoles={["Pekerja"]}>
               <div>
+                <Profile />
                 <DataDocumentation />
                 <DataReting />
                 <DataJadwalPekerja />

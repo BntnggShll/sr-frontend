@@ -135,7 +135,7 @@ const StripePayment = () => {
   return (
     <div id="payment" className="container">
       <h2>
-        <span>SR</span> <span>barbrshop</span>
+        <span>SR</span> <span>barbershop</span>
       </h2>
 
       <div className="row">

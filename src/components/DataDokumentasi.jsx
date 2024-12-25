@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 const DataDocumentation = () => {
+  const [user, setUser] = useState(null); // State untuk user
+  const [error, setError] = useState(null);
   const [documentations, setDocumentations] = useState([]);
   const [workers, setWorkers] = useState([]);
   const [reservations, setReservations] = useState([]);
@@ -9,6 +13,7 @@ const DataDocumentation = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 10;
+  const navigate = useNavigate();
   const [newDocumentation, setNewDocumentation] = useState({
     worker_id: "",
     reservation_id: "",
@@ -17,7 +22,22 @@ const DataDocumentation = () => {
   });
   const [editingDocumentation, setEditingDocumentation] = useState(null);
 
-  // Fetch initial data
+  useEffect(() => {
+    const token = sessionStorage.getItem("token"); // Mengambil token dari Session Storage
+
+    if (token) {
+      try {
+        const decoded = jwtDecode(token); // Mendekode token
+        setUser(decoded);
+      } catch (error) {
+        console.error("Error decoding token", error);
+        setError("Invalid token format or missing parts.");
+      }
+    } else {
+      console.log("No token found");
+    }
+  }, [navigate]);
+
   useEffect(() => {
     // Fetch documentations
     axios
@@ -33,17 +53,18 @@ const DataDocumentation = () => {
       .then((response) => setWorkers(response.data.data))
       .catch((error) => console.error("Error fetching workers", error));
 
-    // Fetch reservations for dropdown
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/reservations`)
-      .then((response) => setReservations(response.data.data))
-      .catch((error) => console.error("Error fetching reservations", error));
+      axios
+        .get(`${process.env.REACT_APP_API_URL}/reservations`)
+        .then((response) => {
+            setReservations(response.data.data);
+        })
+        .catch((error) => console.error("Error fetching reservations", error));
   }, []);
 
   const handleAddDocumentation = (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append("worker_id", newDocumentation.worker_id);
+    formData.append("worker_id", user.user_id);
     formData.append("reservation_id", newDocumentation.reservation_id);
     formData.append("description", newDocumentation.description);
     if (newDocumentation.photo_url) {
@@ -62,6 +83,11 @@ const DataDocumentation = () => {
           description: "",
           photo_url: null,
         });
+        axios
+        .get(`${process.env.REACT_APP_API_URL}/reservations`)
+        .then((response) => {
+            setReservations(response.data.data);
+        })
       })
       .catch((error) => console.error("Error adding documentation", error));
   };
@@ -177,7 +203,9 @@ const DataDocumentation = () => {
               <tr key={documentation.documentation_id}>
                 <td>{documentation.worker.name}</td>
                 <td>{documentation.reservation_id}</td>
-                <td style={{wordBreak:"break-word"}}>{documentation.description}</td>
+                <td style={{ wordBreak: "break-word" }}>
+                  {documentation.description}
+                </td>
                 <td>
                   <img
                     src={documentation.photo_url}
@@ -221,27 +249,6 @@ const DataDocumentation = () => {
               }
             >
               <div className="form-group">
-                <label>Worker:</label>
-                <select
-                  className="form-control"
-                  value={newDocumentation.user_id}
-                  onChange={(e) =>
-                    setNewDocumentation({
-                      ...newDocumentation,
-                      worker_id: e.target.value,
-                    })
-                  }
-                  required
-                >
-                  <option value="">Select Worker</option>
-                  {workers.map((worker) => (
-                    <option key={worker.name} value={worker.user_id}>
-                      {worker.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="form-group">
                 <label>Reservation:</label>
                 <select
                   className="form-control"
@@ -256,7 +263,10 @@ const DataDocumentation = () => {
                 >
                   <option value="">Select Reservation</option>
                   {reservations
-                    .filter((reservation) => reservation.reservation_status !== "Completed")
+                    .filter(
+                      (reservation) =>
+                        reservation.reservation_status !== "Completed" && reservation.worker_id === user.user_id
+                    )
                     .map((reservation) => (
                       <option
                         key={reservation.service.service_name}

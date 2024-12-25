@@ -18,15 +18,13 @@ const Profile = () => {
   });
   const navigate = useNavigate(); // Inisialisasi navigate
 
-  
   useEffect(() => {
     const token = sessionStorage.getItem("token"); // Mengambil token dari Session Storage
 
     if (token) {
       try {
         const decoded = jwtDecode(token); // Mendekode token
-        setUser(decoded); // Menyimpan hasil dekode ke state user
-        console.log(decoded);
+        setUser(decoded); 
       } catch (error) {
         console.error("Error decoding token", error);
         setError("Invalid token format or missing parts."); // Menangani error
@@ -47,9 +45,9 @@ const Profile = () => {
   // Fungsi untuk mengubah nilai input
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
     const dataToSend = new FormData();
-  
+
     // Tambahkan hanya jika ada perubahan data
     if (formData.email && formData.email !== user.email) {
       dataToSend.append("email", formData.email);
@@ -63,7 +61,7 @@ const Profile = () => {
     if (formData.image) {
       dataToSend.append("image", formData.image); // Tambahkan gambar jika ada
     }
-  
+
     // Jika tidak ada perubahan, beri notifikasi dan keluar dari fungsi
     if (dataToSend.keys().next().done) {
       toast.info("No changes made", {
@@ -72,7 +70,7 @@ const Profile = () => {
       });
       return;
     }
-  
+
     // Kirim data ke server
     axios
       .post(
@@ -87,7 +85,7 @@ const Profile = () => {
       .then((response) => {
         if (response.data.success) {
           sessionStorage.setItem("token", response.data.token);
-  
+
           toast.success("Profile updated successfully", {
             position: "top-center",
             autoClose: 3000,
@@ -106,7 +104,6 @@ const Profile = () => {
         });
       });
   };
-  
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -131,7 +128,6 @@ const Profile = () => {
     // Menampilkan loading atau message jika data belum tersedia
     return <div>Loading...</div>;
   }
-
   return (
     <div id="profile">
       <div className="image-container">
@@ -156,12 +152,14 @@ const Profile = () => {
         <p className="judul">No Telepon</p>
         <p className="isi">{user.phone_number}</p>{" "}
         {/* Menampilkan nomor telepon pengguna dari token */}
-        <p className="judul">Subscription Status</p>
-        <p className="isi">{user.subscription_status}</p>{" "}
-        {/* Menampilkan status langganan pengguna dari token */}
-        <p className="judul">Points</p>
-        <p className="isi">{user.points}</p>{" "}
-        {/* Menampilkan poin pengguna dari token */}
+        {user && user.role === "User" && (
+          <>
+            <p className="judul">Subscription Status</p>
+            <p className="isi">{user.subscription_status || "Not available"}</p>
+            <p className="judul">Points</p>
+            <p className="isi">{user.points || "No points available"}</p>
+          </>
+        )}
       </div>
 
       {/* Modal Logout */}

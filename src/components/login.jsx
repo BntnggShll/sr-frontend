@@ -83,7 +83,6 @@ const Login = () => {
 
         <div className="form-section-login">
           <h1 className="login-title">Login</h1>
-
           <label htmlFor="email" className="input-label-login">
             Your Email
           </label>

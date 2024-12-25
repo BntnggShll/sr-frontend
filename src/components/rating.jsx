@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 export const Rating = () => {
   const [reviews, setReviews] = useState([]);
@@ -103,8 +104,9 @@ export const Rating = () => {
           worker_id: selectedReservation.workerId,
         })
         .then((response) => {
-          alert("Review submitted successfully!");
-          console.log(response.data.review);
+          toast.success("Review submitted successfully!");
+          axios.put(`${process.env.REACT_APP_API_URL}/rating/${selectedReservation.reservationId}`)
+
           axios
           .get(`${process.env.REACT_APP_API_URL}/reviews`)
           .then((response) => {
@@ -255,7 +257,7 @@ export const Rating = () => {
                     </h3>
                   </span>
                   <span>
-                    <h6 style={{ marginTop: "40px", marginLeft: "-71px" }}>
+                    <h6 style={{ marginTop: "40px", marginLeft: "-27px" }}>
                       {review.formatted_date}
                     </h6>
                   </span>
@@ -280,6 +282,7 @@ export const Rating = () => {
           </div>
         </div>
       </div>
+      <ToastContainer/>
     </div>
   );
 };

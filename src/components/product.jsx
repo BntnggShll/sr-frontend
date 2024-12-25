@@ -14,10 +14,14 @@ export const Product = () => {
     axios.get(`${process.env.REACT_APP_API_URL}/products`)
       .then(response => {
         if (response.data.success) {
-          setProducts(response.data.product);
+          const filteredProducts = response.data.product.filter(
+            (product) => product.stock > 0
+          );
+          setProducts(filteredProducts);
         } else {
           console.error("Failed to fetch products");
         }
+        
       })
       .catch(error => {
         console.error("Error fetching products", error);

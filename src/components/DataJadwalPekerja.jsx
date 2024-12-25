@@ -1,23 +1,50 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 const ScheduleTable = () => {
+  const [user, setUser] = useState(null); // State untuk user
+  const [error, setError] = useState(null);
   const [schedules, setSchedules] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPageSchedule, setCurrentPageSchedule] = useState(0);
   const itemsPerPage = 10;
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch schedules
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/schedules`)
-      .then((response) => {
-        setSchedules(response.data.schedule);
-      })
-      .catch((error) => {
-        console.error("Error fetching schedules", error);
-      });
-  }, []);
+    const token = sessionStorage.getItem("token"); // Mengambil token dari Session Storage
+
+    if (token) {
+      try {
+        const decoded = jwtDecode(token); // Mendekode token
+        setUser(decoded);
+      } catch (error) {
+        console.error("Error decoding token", error);
+        setError("Invalid token format or missing parts.");
+      }
+    } else {
+      console.log("No token found");
+    }
+  }, [navigate]);
+
+  useEffect(() => {
+    if (user && user.user_id) {
+      // Pastikan data user ada sebelum menjalankan efek
+      // Fetch schedules
+      axios
+        .get(`${process.env.REACT_APP_API_URL}/schedules`)
+        .then((response) => {
+          const schedules = response.data.schedule.filter(
+            (e) => e.worker_id === user.user_id
+          );
+          setSchedules(schedules);
+        })
+        .catch((error) => {
+          console.error("Error fetching schedules", error);
+        });
+    }
+  }, [user]); // Menambahkan user sebagai dependency
 
   const filteredSchedules = schedules.filter((schedule) =>
     String(schedule.available_date)

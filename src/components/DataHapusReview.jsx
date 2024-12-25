@@ -92,7 +92,8 @@ const DataHapusReview = () => {
                 <td>{review.user?.name || "N/A"}</td>
                 <td>{review.worker?.name || "N/A"}</td>
                 <td>{review.formatted_date || "N/A"}</td>
-                <td>{review.feedback || "N/A"}</td>
+                <td style={{ overflowWrap: "break-word" }}
+                >{review.feedback || "N/A"}</td>
                 <td>
                   <button
                     onClick={() => deleteReview(review.review_id)}

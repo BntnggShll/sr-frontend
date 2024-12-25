@@ -36,16 +36,16 @@ const DataRatings = () => {
   // Render
   return (
     <div id="datareting">
-        <nav>
-      <h2>Data Ratings</h2>
-      <input
-        type="text"
-        placeholder="Search feedback"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        className="form-control"
-        style={{ marginBottom: "20px" }}
-      />
+      <nav>
+        <h2>Data Ratings</h2>
+        <input
+          type="text"
+          placeholder="Search feedback"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="form-control"
+          style={{ marginBottom: "20px" }}
+        />
       </nav>
       <div id="table">
         <table className="table">
@@ -65,7 +65,9 @@ const DataRatings = () => {
                 <td>{rating.user.name}</td>
                 <td>{rating.worker.name}</td>
                 <td>{rating.rating}</td>
-                <td>{rating.feedback}</td>
+                <td style={{ overflowWrap: "break-word" }}>
+                  {rating.feedback}
+                </td>
               </tr>
             ))}
           </tbody>
