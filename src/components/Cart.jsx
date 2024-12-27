@@ -6,9 +6,9 @@ import { toast } from "react-toastify";
 const Cart = () => {
   const location = useLocation();
   const { productId, stock, price, name } = location.state || {};
-  const [product, setProduct] = useState(null); // Mengambil data dari state
+  const [products, setProducts] = useState([]);
+  const [Id, setID] = useState([]);
   const [cartItems, setCartItems] = useState([]);
-  const [currentStock, setCurrentStock] = useState(stock || 0);
   const navigate = useNavigate();
 
   // Load cart dari sessionStorage ketika komponen dimount
@@ -19,101 +19,109 @@ const Cart = () => {
     }
   }, []);
 
+  // Mengambil semua produk dari database
   useEffect(() => {
-    const fetchProduct = async () => {
+    const fetchProducts = async () => {
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/products/${productId}`
-        );
-        setProduct(response.data);
-        setCurrentStock(response.data.stock); // Set nilai stok berdasarkan data produk
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/products`);
+        setProducts(response.data);
       } catch (error) {
-        console.error("Error fetching product details:", error);
+        console.error("Error fetching products:", error);
       }
     };
 
-    if (productId) {
-      fetchProduct();
-    }
-  }, [productId]);
+    fetchProducts();
+  }, []);
 
   // Tambahkan item ke cart ketika ada data baru dari location.state
   useEffect(() => {
     if (productId && stock && price && name) {
-      const newCartItems = [
-        ...cartItems,
-        { productId, stock, price, total: stock * price, name },
-      ];
-      setCartItems(newCartItems);
+      const storedCart = sessionStorage.getItem("cart");
+      const parsedCart = storedCart ? JSON.parse(storedCart) : [];
+      const existingProductIndex = parsedCart.findIndex(item => item.productId === productId);
+
+      if (existingProductIndex === -1) {
+        // Jika productId belum ada, tambah item baru
+        parsedCart.push({ productId, stock, price, total: stock * price, name });
+        setCartItems(parsedCart);
+        sessionStorage.setItem("cart", JSON.stringify(parsedCart));
+        navigate(location.state, { replace: true, state: {} });
+      }
     }
   }, [productId, stock, price, name]);
-
-  // Sinkronkan cartItems ke sessionStorage setiap kali berubah
-  useEffect(() => {
-    sessionStorage.setItem("cart", JSON.stringify(cartItems));
-  }, [cartItems]);
 
   // Fungsi untuk menghapus item dari cart
   const removeItem = (index) => {
     const updatedCart = cartItems.filter((_, i) => i !== index);
     setCartItems(updatedCart);
+    sessionStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
+  // Fungsi untuk menambah jumlah produk
   const handleIncrease = (index) => {
-    // Ambil item yang sesuai berdasarkan index
     const selectedItem = cartItems[index];
+    const product = products.product.find((p) => p.product_id === selectedItem.productId);
 
-    // Validasi: Pastikan stok tidak melebihi stok produk yang tersedia
-    if (selectedItem.stock < product.stock) {
-      // Perbarui cartItems dengan stok yang ditingkatkan
+    if (product && selectedItem.stock < product.stock) {
       const updatedCart = cartItems.map((item, i) =>
         i === index
-          ? {
-              ...item,
-              stock: item.stock + 1,
-              total: (item.stock + 1) * item.price,
-            }
+          ? { ...item, stock: item.stock + 1, total: (item.stock + 1) * item.price }
           : item
       );
 
       setCartItems(updatedCart);
-
-      // Opsional: Update currentStock hanya untuk produk ini
-      setCurrentStock((prevStock) => prevStock + 1);
+      sessionStorage.setItem("cart", JSON.stringify(updatedCart));
     } else {
-      console.warn("Stock limit reached!");
+      toast.warn("Stock limit reached!");
     }
   };
 
+  // Fungsi untuk mengurangi jumlah produk
   const handleDecrease = (index) => {
     const updatedCart = cartItems.map((item, i) =>
       i === index && item.stock > 1
-        ? {
-            ...item,
-            stock: item.stock - 1,
-            total: (item.stock - 1) * item.price,
-          }
+        ? { ...item, stock: item.stock - 1, total: (item.stock - 1) * item.price }
         : item
     );
     setCartItems(updatedCart);
+    sessionStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
-  const handlepayment = () => {
+
+  const handlePayment = () => {
     if (cartItems.length === 0) {
       toast.error("Your cart is empty!");
       return;
     }
-
-    const totalAmount = cartItems.reduce((sum, item) => sum + item.total, 0);
-    navigate("/payment", {
-      state: {
-        payable_type: "App\\Models\\Products",
-        payable_id: productId,
-        amount: totalAmount,
-      },
-    });
+  
+    const cart = sessionStorage.getItem("cart");
+    if (cart) {
+      try {
+        const parsedCart = JSON.parse(cart);
+  
+        // Mengupdate stok untuk setiap item dalam cart
+        parsedCart.forEach((item) => {
+          axios
+            .put(`${process.env.REACT_APP_API_URL}/stock/${item.productId}`, {
+              stock: item.stock,
+            })
+        });
+        navigate("/payment", {
+          state: {
+            payable_type: "App\\Models\\Products",
+            payable_id: parsedCart.map((item) => item.productId), // Mengambil semua productId
+            amount: parsedCart.map((item) => item.price * item.stock),
+          },
+        });
+      } catch (error) {
+        console.error("Error parsing cart data:", error);
+        toast.error("Failed to process your cart. Please try again.");
+      }
+    } else {
+      toast.error("Cart is empty or invalid!");
+    }
   };
-
+ 
   return (
     <div id="cart">
       <div>
@@ -216,7 +224,7 @@ const Cart = () => {
                 </p>
               </div>
               <div>
-                <button className="checkout" onClick={handlepayment}>
+                <button className="checkout" onClick={handlePayment}>
                   CHECK OUT
                 </button>
               </div>

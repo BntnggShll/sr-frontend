@@ -28,7 +28,6 @@ import Detailproduk from "./components/detailproduk";
 import Subscripe from "./components/Subscripe";
 import Cart from "./components/cart";
 import Navigationadmin from "./components/navigationadmin"
-import GooglePayPayment from "./components/GooglePayPayment";
 import Navigationpekerja from "./components/navigationpekerja";
 import SmoothScroll from "smooth-scroll";
 import "./App.css";

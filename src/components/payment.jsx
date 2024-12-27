@@ -32,11 +32,24 @@ const StripePayment = () => {
 
   const { payable_type, payable_id, amount } = location.state || {};
 
+  // useEffect(() => {
+  //   if (payable_type && payable_id && amount) {
+  //     setPayment([{ payable_type, payable_id, amount }]);
+  //   }
+  // }, [payable_type, payable_id, amount]);
+
   useEffect(() => {
     if (payable_type && payable_id && amount) {
-      setPayment([{ payable_type, payable_id, amount }]);
+      // Pastikan data diterima dalam bentuk array
+      const paymentData = payable_id.map((id, index) => ({
+        payable_type,
+        payable_id: id,
+        amount: amount[index],
+      }));
+      setPayment(paymentData);
     }
   }, [payable_type, payable_id, amount]);
+
   useEffect(() => {
     const token = sessionStorage.getItem("token"); // Mengambil token dari sessionStorage
 
@@ -54,7 +67,6 @@ const StripePayment = () => {
       navigate("/login"); // Navigasi ke login jika tidak ada token
     }
   }, [navigate]); // Menambahkan navigate sebagai dependensi
-
 
   const handleChange = (e) => {
     setFormData({
@@ -81,56 +93,93 @@ const StripePayment = () => {
       return;
     }
 
-    // Membuat token kartu
-    const { token, error } = await stripe.createToken(cardElement);
-
+    
     if (error) {
       setErrorMessage(error.message);
     } else {
+
       try {
-        const formData = new FormData();
-        formData.append("payable_type", payable_type);
-        formData.append("payable_id", payable_id);
-        formData.append("user_id", user.user_id);
-        formData.append("amount", amount);
-        formData.append("payment_method", "Credit Card");
-        formData.append("name", formData.name); // Pastikan field "name" diisi
-        formData.append("stripeToken", token.id); // Sertakan token Stripe
-
-        const response = await axios.post(
-          `${process.env.REACT_APP_API_URL}/stripe`,
-          formData, // Kirim langsung `formData`
-          {
-            headers: {
-              "Content-Type": "multipart/form-data", // Tambahkan header ini
-            },
-          }
+        // Proses pembayaran menggunakan token unik untuk setiap transaksi
+        const paymentResults = await Promise.all(
+          payment.map(async (paymentItem) => {
+            // Buat token Stripe untuk transaksi ini
+            const { token, error } = await stripe.createToken(cardElement);
+            if (error) {
+              throw new Error(`Failed to create token for payable_id ${paymentItem.payable_id}: ${error.message}`);
+            }
+      
+            // Siapkan data untuk API backend
+            const formData = {
+              payments: [
+                {
+                  payable_type: paymentItem.payable_type,
+                  payable_id: paymentItem.payable_id,
+                  user_id: user.user_id,
+                  amount: paymentItem.amount,
+                  payment_method: "Credit Card",
+                },
+              ],
+              stripeToken: token.id, // Token unik
+            };
+      
+            // Kirim permintaan ke backend
+            try {
+              const response = await axios.post(`${process.env.REACT_APP_API_URL}/stripe`, formData, {
+                headers: { "Content-Type": "application/json" },
+              });
+              return response.data[0]; // Ambil hasil dari respons array backend
+            } catch (apiError) {
+              return {
+                success: false,
+                message: apiError.message || "Failed to connect to the payment server.",
+                payable_id: paymentItem.payable_id,
+              };
+            }
+          })
         );
-
-        if (response.data.success) {
-          setSuccessMessage("Payment successful!");
-          setFormData({ name: "" });
-        } else {
-          setErrorMessage(response.data.message || "Payment failed.");
-        }
-        if (setSuccessMessage) {
-          toast.success("Payment successful!", {
+      
+        // Periksa hasil pembayaran
+        const failedPayments = paymentResults.filter((res) => !res.success);
+      
+        if (failedPayments.length === 0) {
+          // Semua pembayaran berhasil
+          toast.success("All payments were successful!", {
             position: "top-center",
             autoClose: 2000,
-            onClose: () => {
-                navigate("/");
-            },
-          }); // Delay selama 2 detik (2000 milidetik)
+            onClose: () => navigate("/"),
+          });
+        } else {
+          // Beberapa pembayaran gagal
+          const failedMessages = failedPayments
+            .map((payment) => `Payable ID ${payment.payable_id}: ${payment.message}`)
+            .join("\n");
+      
+          console.error("Some payments failed:", failedMessages);
+          toast.error(`${failedPayments.length} payment(s) failed:\n${failedMessages}`, {
+            position: "top-center",
+            autoClose: 4000,
+          });
         }
-        
       } catch (error) {
-        setErrorMessage("An error occurred.");
+        console.error("Error occurred during the payment process:", error);
+        toast.error("An error occurred during the payment process. Please try again.", {
+          position: "top-center",
+          autoClose: 4000,
+        });
       }
     }
   };
   if (!payable_type || !payable_id || !amount) {
-    return <p style={{display:"flex",justifyContent:"center",marginTop:"20%"}}>Error: Missing payment details.</p>;
+    return (
+      <p
+        style={{ display: "flex", justifyContent: "center", marginTop: "20%" }}
+      >
+        Error: Missing payment details.
+      </p>
+    );
   }
+
+  const totalAmount = payment.reduce((sum, item) => sum + item.amount, 0);
 
   return (
     <div id="payment" className="container">
@@ -179,15 +228,13 @@ const StripePayment = () => {
 
                 <div className="row">
                   <div className="col-xs-12">
-                    {payment.map((payment) => (
-                      <button
-                        className="btn btn-primary btn-lg btn-block"
-                        type="submit"
-                        disabled={!stripe}
-                      >
-                        Pay {payment.amount}
-                      </button>
-                    ))}
+                    <button
+                      className="btn btn-primary btn-lg btn-block"
+                      type="submit"
+                      disabled={!stripe}
+                    >
+                      Pay {totalAmount}
+                    </button>
                   </div>
                 </div>
               </form>
@@ -195,7 +242,7 @@ const StripePayment = () => {
           </div>
         </div>
       </div>
-      <ToastContainer/>
+      <ToastContainer />
     </div>
   );
 };
