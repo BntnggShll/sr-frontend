@@ -14,14 +14,13 @@ export const Reservation = () => {
     if (token) {
       try {
         const decoded = jwtDecode(token);
-        setUser(decoded); 
+        setUser(decoded);
       } catch (error) {
         console.error("Error decoding token", error);
         setError("Invalid token format or missing parts.");
       }
     }
   }, [navigate]);
-
 
   useEffect(() => {
     if (user) {
@@ -31,9 +30,20 @@ export const Reservation = () => {
           const reservations = response.data.data;
 
           // Memfilter sesuai dengan user.name
-          const filteredReservations = reservations.filter(
-            (reservation) => reservation.user.name === user.name && reservation.reservation_status !== "Completed" && reservation.reservation_status !== "Rating"
-          );
+          const filteredReservations = reservations.filter((reservation) => {
+            const isUserMatch = reservation.user.name === user.name;
+            const isStatusValid =
+              reservation.reservation_status !== "Completed" &&
+              reservation.reservation_status !== "Rating";
+
+            // Pastikan estimasi tidak terlewat atau bukan tanda "-"
+            const isEstimationValid =
+              typeof reservation.estimasi === "string" &&
+              !reservation.estimasi.includes("yang lalu") &&
+              reservation.estimasi !== "-";
+
+            return isUserMatch && isStatusValid && isEstimationValid;
+          });
 
           setReservations(filteredReservations);
         })

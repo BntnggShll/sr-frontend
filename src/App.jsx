@@ -27,7 +27,7 @@ import DataKeuangan from "./components/DataKeuangan";
 import Detailproduk from "./components/detailproduk";
 import Subscripe from "./components/Subscripe";
 import Cart from "./components/cart";
-import Navigationadmin from "./components/navigationadmin"
+import Navigationadmin from "./components/navigationadmin";
 import Navigationpekerja from "./components/navigationpekerja";
 import SmoothScroll from "smooth-scroll";
 import "./App.css";
@@ -47,41 +47,41 @@ const App = () => {
         <Route
           path="/booking"
           element={
-            // <ProtectedRoute allowedRoles={["User"]}>
-            <Booking />
-            // </ProtectedRoute>
+            <ProtectedRoute allowedRoles={["User"]}>
+              <Booking />
+            </ProtectedRoute>
           }
         />
         <Route
           path="/profile"
           element={
-            // <ProtectedRoute allowedRoles={["User"]}>
-            <Profile />
-            // </ProtectedRoute>
+            <ProtectedRoute allowedRoles={["User"]}>
+              <Profile />
+            </ProtectedRoute>
           }
         />
         <Route
           path="/payment"
           element={
-            // <ProtectedRoute allowedRoles={["User"]}>
-            <DanaPaymentPage />
-            // </ProtectedRoute>
+            <ProtectedRoute allowedRoles={["User"]}>
+              <DanaPaymentPage />
+            </ProtectedRoute>
           }
         />
         <Route
           path="/product/:productId"
           element={
-            // <ProtectedRoute allowedRoles={["User"]}>
-            <Detailproduk />
-            // </ProtectedRoute>
+            <ProtectedRoute allowedRoles={["User"]}>
+              <Detailproduk />
+            </ProtectedRoute>
           }
         />
         <Route
           path="/cart"
           element={
-            // <ProtectedRoute allowedRoles={["User"]}>
-            <Cart />
-            // </ProtectedRoute>
+            <ProtectedRoute allowedRoles={["User"]}>
+              <Cart />
+            </ProtectedRoute>
           }
         />
 
@@ -117,78 +117,78 @@ const App = () => {
         <Route
           path="/admin"
           element={
-            // <ProtectedRoute allowedRoles={["Admin"]}>
-            <div>
-              <Navigationadmin />
-              <DataKeuangan />
-            </div>
-            // </ProtectedRoute>
+            <ProtectedRoute allowedRoles={["Admin"]}>
+              <div>
+                <Navigationadmin />
+                <DataKeuangan />
+              </div>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/dataproduct"
           element={
-            // <ProtectedRoute allowedRoles={["Admin"]}>
-            <div>
-              <Navigationadmin />
-              <DataProduct />
-            </div>
-            // </ProtectedRoute>
+            <ProtectedRoute allowedRoles={["Admin"]}>
+              <div>
+                <Navigationadmin />
+                <DataProduct />
+              </div>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/datauser"
           element={
-            // <ProtectedRoute allowedRoles={["Admin"]}>
-            <div>
-              <Navigationadmin />
-              <DataUser />
-            </div>
-            // </ProtectedRoute>
+            <ProtectedRoute allowedRoles={["Admin"]}>
+              <div>
+                <Navigationadmin />
+                <DataUser />
+              </div>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/dataservice"
           element={
-            // <ProtectedRoute allowedRoles={["Admin"]}>
-            <div>
-              <Navigationadmin />
-              <DataService />
-            </div>
-            // </ProtectedRoute>
+            <ProtectedRoute allowedRoles={["Admin"]}>
+              <div>
+                <Navigationadmin />
+                <DataService />
+              </div>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/datajadwal"
           element={
-            // <ProtectedRoute allowedRoles={["Admin"]}>
-            <div>
-              <Navigationadmin />
-              <DataJadwal />
-            </div>
-            // </ProtectedRoute>
+            <ProtectedRoute allowedRoles={["Admin"]}>
+              <div>
+                <Navigationadmin />
+                <DataJadwal />
+              </div>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/datalaporan"
           element={
-            // <ProtectedRoute allowedRoles={["Admin"]}>
-            <div>
-              <Navigationadmin />
-              <DataLaporan />
-            </div>
-            // </ProtectedRoute>
+            <ProtectedRoute allowedRoles={["Admin"]}>
+              <div>
+                <Navigationadmin />
+                <DataLaporan />
+              </div>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/datahapusreview"
           element={
-            // <ProtectedRoute allowedRoles={["Admin"]}>
-            <div>
-              <Navigationadmin />
-              <DataHapusReview />
-            </div>
-            // </ProtectedRoute>
+            <ProtectedRoute allowedRoles={["Admin"]}>
+              <div>
+                <Navigationadmin />
+                <DataHapusReview />
+              </div>
+            </ProtectedRoute>
           }
         />
 
@@ -196,46 +196,46 @@ const App = () => {
         <Route
           path="/pekerja"
           element={
-            // <ProtectedRoute allowedRoles={["Pekerja"]}>
-            <div>
-              <Navigationpekerja />
-              <Profile />
-            </div>
-            // </ProtectedRoute>
+            <ProtectedRoute allowedRoles={["Pekerja"]}>
+              <div>
+                <Navigationpekerja />
+                <Profile />
+              </div>
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/datadocumentation"
           element={
-            // <ProtectedRoute allowedRoles={["Pekerja"]}>
-            <div>
-              <Navigationpekerja />
-              <DataDocumentation />
-            </div>
-            // </ProtectedRoute>
+            <ProtectedRoute allowedRoles={["Pekerja"]}>
+              <div>
+                <Navigationpekerja />
+                <DataDocumentation />
+              </div>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/datareting"
           element={
-            // <ProtectedRoute allowedRoles={["Pekerja"]}>
-            <div>
-              <Navigationpekerja />
-              <DataReting />
-            </div>
-            // </ProtectedRoute>
+            <ProtectedRoute allowedRoles={["Pekerja"]}>
+              <div>
+                <Navigationpekerja />
+                <DataReting />
+              </div>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/datajadwalpekerja"
           element={
-            // <ProtectedRoute allowedRoles={["Pekerja"]}>
-            <div>
-              <Navigationpekerja />
-              <DataJadwalPekerja />
-            </div>
-            // </ProtectedRoute>
+            <ProtectedRoute allowedRoles={["Pekerja"]}>
+              <div>
+                <Navigationpekerja />
+                <DataJadwalPekerja />
+              </div>
+            </ProtectedRoute>
           }
         />
       </Routes>

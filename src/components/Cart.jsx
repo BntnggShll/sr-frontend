@@ -23,7 +23,9 @@ const Cart = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/products`);
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/products`
+        );
         setProducts(response.data);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -38,11 +40,19 @@ const Cart = () => {
     if (productId && stock && price && name) {
       const storedCart = sessionStorage.getItem("cart");
       const parsedCart = storedCart ? JSON.parse(storedCart) : [];
-      const existingProductIndex = parsedCart.findIndex(item => item.productId === productId);
+      const existingProductIndex = parsedCart.findIndex(
+        (item) => item.productId === productId
+      );
 
       if (existingProductIndex === -1) {
         // Jika productId belum ada, tambah item baru
-        parsedCart.push({ productId, stock, price, total: stock * price, name });
+        parsedCart.push({
+          productId,
+          stock,
+          price,
+          total: stock * price,
+          name,
+        });
         setCartItems(parsedCart);
         sessionStorage.setItem("cart", JSON.stringify(parsedCart));
         navigate(location.state, { replace: true, state: {} });
@@ -60,12 +70,18 @@ const Cart = () => {
   // Fungsi untuk menambah jumlah produk
   const handleIncrease = (index) => {
     const selectedItem = cartItems[index];
-    const product = products.product.find((p) => p.product_id === selectedItem.productId);
+    const product = products.product.find(
+      (p) => p.product_id === selectedItem.productId
+    );
 
     if (product && selectedItem.stock < product.stock) {
       const updatedCart = cartItems.map((item, i) =>
         i === index
-          ? { ...item, stock: item.stock + 1, total: (item.stock + 1) * item.price }
+          ? {
+              ...item,
+              stock: item.stock + 1,
+              total: (item.stock + 1) * item.price,
+            }
           : item
       );
 
@@ -80,31 +96,36 @@ const Cart = () => {
   const handleDecrease = (index) => {
     const updatedCart = cartItems.map((item, i) =>
       i === index && item.stock > 1
-        ? { ...item, stock: item.stock - 1, total: (item.stock - 1) * item.price }
+        ? {
+            ...item,
+            stock: item.stock - 1,
+            total: (item.stock - 1) * item.price,
+          }
         : item
     );
     setCartItems(updatedCart);
     sessionStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
-
   const handlePayment = () => {
     if (cartItems.length === 0) {
       toast.error("Your cart is empty!");
       return;
     }
-  
+
     const cart = sessionStorage.getItem("cart");
     if (cart) {
       try {
         const parsedCart = JSON.parse(cart);
-  
+
         // Mengupdate stok untuk setiap item dalam cart
         parsedCart.forEach((item) => {
-          axios
-            .put(`${process.env.REACT_APP_API_URL}/stock/${item.productId}`, {
+          axios.put(
+            `${process.env.REACT_APP_API_URL}/stock/${item.productId}`,
+            {
               stock: item.stock,
-            })
+            }
+          );
         });
         navigate("/payment", {
           state: {
@@ -121,7 +142,7 @@ const Cart = () => {
       toast.error("Cart is empty or invalid!");
     }
   };
- 
+
   return (
     <div id="cart">
       <div>
@@ -206,7 +227,10 @@ const Cart = () => {
                   Sub Total: Rp
                   {cartItems.reduce((sum, item) => sum + item.total, 0)}
                 </p>
-                <p style={{ color: "#D7843E" }}>Add subscriber coupon</p>
+                {/* <div style={{display:"flex",justifyContent:"space-between"}}>
+                    <p style={{ color: "#D7843E"}}>Add subscriber coupon</p>
+                    <input type="text" style={{width:"40%"}}/>
+                </div> */}
                 <hr
                   style={{
                     backgroundColor: "#6D6D6D",

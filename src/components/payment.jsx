@@ -41,14 +41,26 @@ const StripePayment = () => {
   useEffect(() => {
     if (payable_type && payable_id && amount) {
       // Pastikan data diterima dalam bentuk array
-      const paymentData = payable_id.map((id, index) => ({
+      const payableIdArray = Array.isArray(payable_id) ? payable_id : [payable_id];
+      const amountArray = Array.isArray(amount) ? amount : [amount];
+  
+      // Pastikan panjang array konsisten
+      if (payableIdArray.length !== amountArray.length) {
+        console.error("Payable ID and amount arrays must have the same length.");
+        return;
+      }
+  
+      // Proses data ke dalam bentuk array objek
+      const paymentData = payableIdArray.map((id, index) => ({
         payable_type,
         payable_id: id,
-        amount: amount[index],
+        amount: amountArray[index],
       }));
+  
       setPayment(paymentData);
     }
   }, [payable_type, payable_id, amount]);
+    
 
   useEffect(() => {
     const token = sessionStorage.getItem("token"); // Mengambil token dari sessionStorage

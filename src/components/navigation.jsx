@@ -53,11 +53,6 @@ export const Navigation = (props) => {
           id="bs-example-navbar-collapse-1"
         >
           <ul className="nav navbar-nav ms-autonavbar-nav me-auto mb-2 mb-lg-0">
-            <li>
-              <a href="#reservation" className="page-scroll">
-                Home
-              </a>
-            </li>
             {user && user.subscription_status !== "Aktif" ? (
               <li>
                 <a href="#subscripe" className="page-scroll">
@@ -65,6 +60,11 @@ export const Navigation = (props) => {
                 </a>
               </li>
             ) : null}
+            <li>
+              <a href="#reservation" className="page-scroll">
+                Reservation
+              </a>
+            </li>
 
             <li>
               <a href="#team" className="page-scroll">
